@@ -13,31 +13,31 @@ use crate::generic_result::GenericResult;
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
 enum BeeCLI {
-    /// Initiailizes a BBee project.
-    Init,
-    /// Builds an existing BBee project into a jar.
-    Build,
-    /// Removes existing build data.
-    Clean
+	/// Initiailizes a BBee project.
+	Init,
+	/// Builds an existing BBee project into a jar.
+	Build,
+	/// Removes existing build data.
+	Clean
 }
 
 fn main() -> GenericResult<()> {
-    let current_path_buf = env::current_dir()?;
-    let current_path = current_path_buf.as_path();
+	let current_path_buf = env::current_dir()?;
+	let current_path = current_path_buf.as_path();
 
-    match BeeCLI::from_args() {
-        BeeCLI::Build => {
-            subcommands::build::build(current_path);
-        }
+	match BeeCLI::from_args() {
+		BeeCLI::Build => {
+			subcommands::build::build(current_path);
+		}
 
-        BeeCLI::Init => {
-            println!("Initializing Project...");
-        }
+		BeeCLI::Init => {
+			println!("Initializing Project...");
+		}
 
-        BeeCLI::Clean => {
+		BeeCLI::Clean => {
 
-        }
-    }
+		}
+	}
 
-    Ok(())
+	Ok(())
 }
