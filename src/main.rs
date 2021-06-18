@@ -4,6 +4,7 @@ use structopt::StructOpt;
 use std::env;
 use crate::javac::compile;
 use walkdir::WalkDir;
+use std::io::Error;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
@@ -12,7 +13,7 @@ enum BeeCLI {
     Build
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let current_path = env::current_dir().unwrap();
 
     match BeeCLI::from_args() {
@@ -29,7 +30,7 @@ fn main() {
                         compile(
                             &current_path.join("target").join("classes"),
                             &v.path().to_path_buf()
-                        );
+                        )?;
                     }
                     Err(_e) => {
                         continue;
@@ -42,4 +43,6 @@ fn main() {
             println!("Initializing Project...");
         }
     }
+
+    Ok(())
 }
