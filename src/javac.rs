@@ -3,7 +3,7 @@ use std::process::Command;
 use std::process::ExitStatus;
 use std::io::{Error, ErrorKind};
 
-/// Puts a file at a specififed target
+/// Compiles a `file` with javac and puts it at the `target` path.
 pub fn compile(target: &Path, file: &Path) -> Result<(), Error> {
 	
 	let status: ExitStatus = Command::new("javac")

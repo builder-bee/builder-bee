@@ -1,17 +1,21 @@
 use std::path::Path;
-use toml::Value;
 use std::error::Error;
+use std::fs;
 
-let file_name = "bbee.toml"
+static FILE_NAME: &str = "bbee.toml";
 
-pub fn read(current_directory: &Path) -> Result<(), Box<dyn Error>> {
+// Reads the bbee file.
+pub fn read(current_directory: &Path) -> Result<String, Box<dyn Error>> {
 
-	let file = File::open(path.join(file_name))?;
+	let config_path = current_directory.join(FILE_NAME);
 
-	let content = file.read_to_string(String::new())?;
+	let content = fs::read_to_string(config_path)?;
+
+	return Ok(content);
 
 }
 
+// Check if the bbee config is in the project
 pub fn exists(current_directory: &Path) -> bool {
-	return current_directory.join(file_name).exists()
+	return current_directory.join(FILE_NAME).exists()
 }
