@@ -1,10 +1,10 @@
-use std::path::PathBuf;
+use std::path::Path;
 use std::process::Command;
 use std::process::ExitStatus;
 use std::io::{Error, ErrorKind};
 
-
-pub fn compile(target: &PathBuf, file: &PathBuf) -> Result<(), std::io::Error> {
+/// Puts a file at a specififed target
+pub fn compile(target: &Path, file: &Path) -> Result<(), Error> {
 	
 	let status: ExitStatus = Command::new("javac")
 			.arg(file.display().to_string())

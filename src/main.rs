@@ -1,10 +1,12 @@
+#![crate_name = "bbee"]
+
 mod javac;
 
 use structopt::StructOpt;
 use std::env;
 use crate::javac::compile;
 use walkdir::WalkDir;
-use std::io::Error;
+use std::error::Error;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
@@ -13,29 +15,24 @@ enum BeeCLI {
     Build
 }
 
-fn main() -> Result<(), Error> {
-    let current_path = env::current_dir().unwrap();
+fn main() -> Result<(), Box<dyn Error>> {
+    let current_path = env::current_dir()?;
 
     match BeeCLI::from_args() {
         BeeCLI::Build => {
             println!("Building...");
             for entry in WalkDir::new(current_path.join("main").join("src")) {
 
-                match entry.as_ref() {
-                    Ok(v) => {
-                        if v.file_type().is_dir() {
-                            continue;
-                        }
-        
-                        compile(
-                            &current_path.join("target").join("classes"),
-                            &v.path().to_path_buf()
-                        )?;
-                    }
-                    Err(_e) => {
-                        continue;
-                    }
+                let exposed_entry = entry?;
+
+                if exposed_entry.file_type().is_dir() {
+                    continue;
                 }
+
+                compile(
+                    &current_path.join("build").join("classes").as_path(),
+                    &exposed_entry.path()
+                )?;
             }
         }
 
