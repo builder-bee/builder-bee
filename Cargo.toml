@@ -1,6 +1,6 @@
 [package]
 name = "bbee"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["LeoDog896 <LeoDog896@hotmail.com>"]
 edition = "2018"
 
@@ -10,4 +10,4 @@ edition = "2018"
 structopt = "0.3.13"
 walkdir = "2"
 toml = "0.4.2"
-zip = "0.5"
+zip = "0.5.13"

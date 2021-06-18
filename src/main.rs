@@ -2,6 +2,7 @@
 
 mod javac;
 mod bbee_reader;
+mod compile;
 
 use structopt::StructOpt;
 use std::env;
@@ -34,17 +35,19 @@ fn main() -> Result<(), Error> {
 
             for entry in WalkDir::new(current_path.join("main").join("src")) {
 
-                let exposed_entry = entry?;
+                let ref_entry = &entry?;
 
-                if exposed_entry.file_type().is_dir() {
+                if ref_entry.file_type().is_dir() {
                     continue;
                 }
-
+                
                 javac::compile(
                     &current_path.join("build").join("classes").as_path(),
-                    &exposed_entry.path()
+                    &ref_entry.path()
                 )?;
             }
+
+            compile::compile(current_path)?;
 
             println!("Finished building!")
         }
