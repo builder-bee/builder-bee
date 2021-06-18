@@ -11,8 +11,12 @@ use std::io::{Error, ErrorKind};
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
 enum BeeCLI {
+    /// Initiailizes a BBee project.
     Init,
-    Build
+    /// Builds an existing BBee project into a jar.
+    Build,
+    /// Removes existing build data.
+    Clean
 }
 
 fn main() -> Result<(), Error> {
@@ -47,6 +51,10 @@ fn main() -> Result<(), Error> {
 
         BeeCLI::Init => {
             println!("Initializing Project...");
+        }
+
+        BeeCLI::Clean => {
+
         }
     }
 
