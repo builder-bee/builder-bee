@@ -5,13 +5,15 @@ use std::fs::File;
 use zip::ZipWriter;
 use std::io::Write;
 use std::fs;
+use crate::bbee_reader;
 
-pub fn compile(working_directory: &Path) -> Result<(), Error> {
+pub fn compile(working_directory: &Path, config: bbee_reader::BBeeConfig) -> Result<(), Error> {
 	let output_file = working_directory.join("build").join("libs");
 
 	fs::create_dir_all(&output_file).expect("Directories could not be created, not enough permissions.");
 
-	let file = File::create(&output_file.join("name.jar")).expect("Jar file could not be created."); // TODO get name of project.
+	let file = File::create(&output_file.join(format!("{}.jar", config.info.name)))
+		.expect("Jar file could not be created."); // TODO get name of project.
 
 	let mut zip = ZipWriter::new(file);
 
