@@ -37,5 +37,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	// Finally, compile the jar
 	compile::compile(working_directory, config)?;
 
-	println!("Finished building!")
+	println!("Finished building!");
+
+	Ok(())
 }

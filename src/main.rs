@@ -27,7 +27,7 @@ fn main() -> GenericResult<()> {
 
 	match BeeCLI::from_args() {
 		BeeCLI::Build => {
-			subcommands::build::build(current_path);
+			subcommands::build::build(current_path)?;
 		}
 
 		BeeCLI::Init => {
@@ -35,7 +35,7 @@ fn main() -> GenericResult<()> {
 		}
 
 		BeeCLI::Clean => {
-
+			subcommands::clean::clean(current_path)?;
 		}
 	}
 
