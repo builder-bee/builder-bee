@@ -11,3 +11,4 @@ structopt = "0.3.13"
 walkdir = "2"
 toml = "0.4.2"
 zip = "0.5.13"
+serde = { version = "1.0.126", features = ["derive"] }

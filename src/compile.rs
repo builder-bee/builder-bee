@@ -7,14 +7,13 @@ use std::io::Write;
 use std::fs;
 
 pub fn compile(working_directory: &Path) -> Result<(), Error> {
-	let output_file = working_directory.join("build").join("libs"); // TODO get name of project.
+	let output_file = working_directory.join("build").join("libs");
 
 	fs::create_dir_all(&output_file).expect("Directories could not be created, not enough permissions.");
 
-	let file = File::create(&output_file.join("name.jar")).expect("Jar file could not be created.");
+	let file = File::create(&output_file.join("name.jar")).expect("Jar file could not be created."); // TODO get name of project.
 
 	let mut zip = ZipWriter::new(file);
-
 
 	let root_class_folder = working_directory.join("build").join("classes");
 
