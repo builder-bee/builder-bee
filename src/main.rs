@@ -1,4 +1,5 @@
 use structopt::StructOpt;
+use std::env;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
@@ -8,6 +9,8 @@ enum BeeCLI {
 }
 
 fn main() {
+    let current_path = env::current_dir().unwrap();
+
     match BeeCLI::from_args() {
         BeeCLI::Build => {
             println!("Building...");
