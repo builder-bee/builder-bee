@@ -4,10 +4,10 @@ mod javac;
 mod bbee_reader;
 mod compile;
 mod generic_result;
+mod subcommands;
 
 use structopt::StructOpt;
 use std::env;
-use walkdir::WalkDir;
 use crate::generic_result::GenericResult;
 
 #[derive(StructOpt)]
@@ -27,31 +27,7 @@ fn main() -> GenericResult<()> {
 
     match BeeCLI::from_args() {
         BeeCLI::Build => {
-            println!("Building...");
-
-            if !bbee_reader::exists(current_path) {
-                panic!("Config file not found!");
-            }
-
-            let config = bbee_reader::read(current_path)?;
-
-            for entry in WalkDir::new(current_path.join("main").join("src")) {
-
-                let ref_entry = &entry?;
-
-                if ref_entry.file_type().is_dir() {
-                    continue;
-                }
-                
-                javac::compile(
-                    &current_path.join("build").join("classes").as_path(),
-                    &ref_entry.path()
-                )?;
-            }
-
-            compile::compile(current_path, config)?;
-
-            println!("Finished building!")
+            subcommands::build::build(current_path);
         }
 
         BeeCLI::Init => {
