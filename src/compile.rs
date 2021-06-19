@@ -5,9 +5,10 @@ use std::fs::File;
 use zip::ZipWriter;
 use std::io::Write;
 use std::fs;
-use crate::bbee_reader;
+use crate::bbee_reader::BBeeConfig;
 
-pub fn compile(working_directory: &Path, config: bbee_reader::BBeeConfig) -> Result<(), Error> {
+// Compiles a jar into a working directory with a BBeeConfig.
+pub fn compile(working_directory: &Path, config: BBeeConfig) -> Result<(), Error> {
 	let output_file = working_directory.join("build").join("libs");
 
 	fs::create_dir_all(&output_file).expect("Directories could not be created, not enough permissions.");
