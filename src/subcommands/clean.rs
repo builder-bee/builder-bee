@@ -3,6 +3,7 @@ use std::fs;
 use crate::generic_result::GenericResult;
 use crate::bbee_reader;
 
+/// Remove the build directory from the `working_directory`
 pub fn clean(working_directory: &Path) -> GenericResult<()> {
 
 	if !bbee_reader::exists(working_directory) {

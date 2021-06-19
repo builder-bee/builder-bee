@@ -12,7 +12,11 @@ pub fn compile(working_directory: &Path, config: bbee_reader::BBeeConfig) -> Res
 
 	fs::create_dir_all(&output_file).expect("Directories could not be created, not enough permissions.");
 
-	let file = File::create(&output_file.join(format!("{}.jar", config.info.name)))
+	let file = File::create(&output_file.join(format!(
+		"{}-{}.jar",
+		config.info.name,
+		config.info.version
+	)))
 		.expect("Jar file could not be created.");
 
 	let mut zip = ZipWriter::new(file);
