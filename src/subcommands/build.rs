@@ -4,9 +4,12 @@ use crate::generic_result::GenericResult;
 use crate::bbee_reader;
 use crate::javac;
 use crate::compile;
+use std::time::Instant;
+use colored::*;
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
-	println!("Building...");
+
+	let now = Instant::now();
 
 	// Need to make sure the config file is here
 	if !bbee_reader::exists(working_directory) {
@@ -15,6 +18,12 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	
 	// Read the config file
 	let config = bbee_reader::read(working_directory)?;
+
+	println!(
+		"Building {} -- v{}...",
+		config.info.name.white(),
+		config.info.version.white()
+	);
 
 	// Walk through all the currentl .java files
 	for entry in WalkDir::new(working_directory.join("main").join("src")) {
@@ -37,7 +46,11 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	// Finally, compile the jar
 	compile::compile(working_directory, config)?;
 
-	println!("Finished building!");
+	println!(
+		"Build {}! (Took {} milliseconds)",
+		"successful".green(),
+		now.elapsed().as_millis().to_string().white()
+	);
 
 	Ok(())
 }

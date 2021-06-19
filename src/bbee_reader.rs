@@ -7,7 +7,14 @@ static FILE_NAME: &str = "bbee.toml";
 
 #[derive(Deserialize)]
 pub struct BBeeConfigInfo {
-	pub name: String
+	pub name: String,
+	
+	#[serde(default = "default_version")]
+	pub version: String
+}
+
+fn default_version() -> String {
+    "1.0.0".to_string()
 }
 
 #[derive(Deserialize)]
