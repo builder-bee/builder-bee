@@ -6,6 +6,13 @@ use crate::generic_result::GenericResult;
 static FILE_NAME: &str = "bbee.toml";
 
 #[derive(Deserialize)]
+pub struct BBeeConfigDependency {
+	pub name: String,
+	pub version: String,
+	pub r#type: String
+}
+
+#[derive(Deserialize)]
 pub struct BBeeConfigInfo {
 	pub name: String,
 	
