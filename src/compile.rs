@@ -33,10 +33,7 @@ pub fn compile(working_directory: &Path, config: BBeeConfig) -> Result<(), Error
 		}
 
 		let entry_path: String = ref_entry
-			.path().display().to_string() // Absolute path
-			.chars().skip( // Skip
-				root_class_folder.display().to_string().chars().count() // X root chars
-			).collect(); // and collect
+			.path().strip_prefix(&root_class_folder).unwrap().display().to_string();
 
 		if ref_entry.file_type().is_dir() {
 			zip.add_directory(entry_path, Default::default())?;

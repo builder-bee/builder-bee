@@ -32,11 +32,11 @@ pub fn read(working_directory: &Path) -> GenericResult<BBeeConfig> {
 	let config: BBeeConfig = toml::from_str(&fs::read_to_string(config_path)?)?;
 
 	// Return the config!
-	return Ok(config)
+	Ok(config)
 
 }
 
 /// Check if the bbee config is in the project
 pub fn exists(working_directory: &Path) -> bool {
-	return working_directory.join(FILE_NAME).exists()
+	working_directory.join(FILE_NAME).exists()
 }

@@ -47,9 +47,9 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	compile::compile(working_directory, config)?;
 
 	println!(
-		"Build {}! (Took {} milliseconds)",
+		"Build {}! (Took {} seconds)",
 		"successful".green(),
-		now.elapsed().as_millis().to_string().white()
+		(now.elapsed().as_millis() as f32 / 1000.0).to_string().white()
 	);
 
 	Ok(())
