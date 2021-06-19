@@ -6,6 +6,7 @@ use crate::javac;
 use crate::compile;
 use std::time::Instant;
 use colored::*;
+use spinners::{Spinner, Spinners};
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
 
@@ -19,10 +20,13 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	// Read the config file
 	let config = bbee_reader::read(working_directory)?;
 
-	println!(
-		"Building {} -- v{}...",
-		config.info.name.white(),
-		config.info.version.white()
+	let spinner = Spinner::new(
+		Spinners::Line,
+		format!(
+			"Building {} -- v{}...",
+			config.info.name.white(),
+			config.info.version.white()
+		)
 	);
 
 	// Walk through all the currentl .java files
@@ -46,8 +50,10 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	// Finally, compile the jar
 	compile::compile(working_directory, config)?;
 
+	spinner.stop();
+
 	println!(
-		"Build {}! (Took {} seconds)",
+		"\nBuild {}! (Took {} seconds)",
 		"successful".green(),
 		(now.elapsed().as_millis() as f32 / 1000.0).to_string().white()
 	);

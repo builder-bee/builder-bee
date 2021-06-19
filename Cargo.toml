@@ -13,6 +13,7 @@ toml = "0.4.2"
 zip = "0.5.13"
 serde = { version = "1.0.126", features = ["derive"] }
 colored = "2"
+spinners = "1.2.0"
 
 [profile.release]
 lto = "fat"
