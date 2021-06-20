@@ -19,7 +19,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	
 	// Read the config file
 	let config = bbee_reader::read(working_directory)?;
-
+	
 	let spinner = Spinner::new(
 		Spinners::Line,
 		format!(
@@ -44,7 +44,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 		javac::compile(
 			&working_directory.join("build").join("classes").as_path(),
 			&ref_entry.path()
-		)?;
+		).expect(format!("An unknown error occured while compiling class {}.", &ref_entry.path().display().to_string()).as_str());
 	}
 
 	// Finally, compile the jar

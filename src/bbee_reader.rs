@@ -5,18 +5,21 @@ use crate::generic_result::GenericResult;
 
 static FILE_NAME: &str = "bbee.toml";
 
+/// Represents a dependency inside BBEE
 pub struct BBeeConfigDependency {
 	pub name: String,
 	pub version: String,
-	pub r#type: String
+	pub shade: String // TODO enum?
 }
 
+/// Information about the project
 pub struct BBeeConfigInfo {
 	pub name: String,
 	pub main: Option<String>,
 	pub version: String,
 }
 
+/// Per-project/submodule configuration for BBee
 pub struct BBeeConfig {
 	pub info: BBeeConfigInfo,
 	pub dependencies: Vec<BBeeConfigDependency>
@@ -46,7 +49,8 @@ pub fn exists(working_directory: &Path) -> bool {
 
 fn config_from_value(value: &Value) -> BBeeConfig {
 
-	let info =  value.get("info").unwrap(); // Should always be in a bbee config.
+	let info = value.get("info").unwrap(); // Should always be in a bbee config.
+	let dependencies = value.get("dependencies");
 
 	return BBeeConfig {
 		info: BBeeConfigInfo {
@@ -60,10 +64,24 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 			// Get semi-mandatory version number (defaults to 1.0.0)
 			version: info.get("version").unwrap_or(&Value::String("1.0.0".to_string())).as_str().unwrap_or("1.0.0").to_string(),
 		},
+		
+		dependencies: if dependencies.is_some() {
+			let unwrapped_dependencies = dependencies.unwrap().as_table().unwrap();
 
-		// TODO get dependencies dynamically.
-		dependencies: vec![
-			BBeeConfigDependency { name: "hello".to_string(), version: "hello".to_string(), r#type: "hello".to_string() },
-		]
+			let mut vector: Vec<BBeeConfigDependency> = Vec::with_capacity(unwrapped_dependencies.len());
+
+			// EX "com.google.code.gson:gson" = { version = "2.8.7", shade = "all" }
+			for (key, value) in unwrapped_dependencies {
+				vector.push(BBeeConfigDependency {
+					name: key.to_string(),
+					version: value.get("version").unwrap().as_str().unwrap().to_string(),
+					shade: value.get("version").unwrap_or(&Value::String("none".to_string())).as_str().unwrap().to_string()
+				})
+			}
+
+			vector
+		} else { 
+			vec![]
+		}
 	};
 }
