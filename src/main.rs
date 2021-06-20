@@ -22,7 +22,9 @@ enum BeeCLI {
 	/// Removes existing build data.
 	Clean,
 	/// Tests the code
-	Test
+	Test,
+	/// Runs the built jar in the code
+	Run
 }
 
 fn main() -> GenericResult<()> {
@@ -36,7 +38,9 @@ fn main() -> GenericResult<()> {
 
 		BeeCLI::Clean => clean::clean(current_path),
 
-		BeeCLI::Test => test::test(current_path)
+		BeeCLI::Test => test::test(current_path),
+
+		BeeCLI::Run => run::run(current_path)
 	}?;
 
 	Ok(())
