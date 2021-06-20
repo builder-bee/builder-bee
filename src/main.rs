@@ -1,6 +1,6 @@
 #![crate_name = "bbee"]
 
-mod javac;
+mod cmd;
 mod bbee_reader;
 mod compile;
 mod generic_result;

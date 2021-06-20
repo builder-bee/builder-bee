@@ -2,7 +2,7 @@ use walkdir::WalkDir;
 use std::path::Path;
 use crate::generic_result::GenericResult;
 use crate::bbee_reader;
-use crate::javac;
+use crate::cmd::javac;
 use crate::compile;
 use std::time::Instant;
 use colored::*;
