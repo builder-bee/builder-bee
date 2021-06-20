@@ -7,6 +7,7 @@ use std::fs;
 use crate::bbee_reader::BBeeConfig;
 use crate::manifest::generate_manifest;
 use crate::generic_result::GenericResult;
+use super::jar_name::jar_name;
 
 // Compiles a jar into a working directory with a BBeeConfig.
 pub fn compile(working_directory: &Path, config: BBeeConfig) -> GenericResult<()> {
@@ -14,11 +15,7 @@ pub fn compile(working_directory: &Path, config: BBeeConfig) -> GenericResult<()
 
 	fs::create_dir_all(&output_file).expect("Directories could not be created, not enough permissions.");
 
-	let file = File::create(&output_file.join(format!(
-		"{}-{}.jar",
-		config.info.name,
-		config.info.version
-	)))
+	let file = File::create(&output_file.join(jar_name(&config)))
 		.expect("Jar file could not be created.");
 
 	let mut zip = ZipWriter::new(file);

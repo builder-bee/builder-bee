@@ -2,7 +2,7 @@
 
 mod cmd;
 mod bbee_reader;
-mod compile;
+mod jar;
 mod generic_result;
 mod subcommands;
 mod manifest;

@@ -13,7 +13,7 @@ pub struct BBeeConfigDependency {
 
 pub struct BBeeConfigInfo {
 	pub name: String,
-	pub main: String,
+	pub main: Option<String>,
 	pub version: String,
 }
 
@@ -51,7 +51,7 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 	return BBeeConfig {
 		info: BBeeConfigInfo {
 			name: info.get("name").unwrap().as_str().unwrap().to_string(),
-			main: info.get("main").unwrap().as_str().unwrap().to_string(),
+			main: if info.get("main").is_some() { Some(info.get("main").unwrap().as_str().unwrap().to_string()) } else { None },
 			version: info.get("version").unwrap_or(&Value::String("1.0.0".to_string())).as_str().unwrap_or("1.0.0").to_string(),
 		},
 		dependencies: vec![
