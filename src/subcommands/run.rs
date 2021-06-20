@@ -4,6 +4,7 @@ use crate::bbee_reader;
 use crate::cmd::javarun;
 use crate::jar::jar_name;
 
+/// Runs the generated jar.
 pub fn run(working_directory: &Path) -> GenericResult<()> {
 
 	if !bbee_reader::exists(working_directory) {
