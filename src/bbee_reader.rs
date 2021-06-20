@@ -50,10 +50,18 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 
 	return BBeeConfig {
 		info: BBeeConfigInfo {
+
+			// Unwrap manditory Name
 			name: info.get("name").unwrap().as_str().unwrap().to_string(),
+
+			// Get optional main class.
 			main: if info.get("main").is_some() { Some(info.get("main").unwrap().as_str().unwrap().to_string()) } else { None },
+
+			// Get semi-mandatory version number (defaults to 1.0.0)
 			version: info.get("version").unwrap_or(&Value::String("1.0.0".to_string())).as_str().unwrap_or("1.0.0").to_string(),
 		},
+
+		// TODO get dependencies dynamically.
 		dependencies: vec![
 			BBeeConfigDependency { name: "hello".to_string(), version: "hello".to_string(), r#type: "hello".to_string() },
 		]
