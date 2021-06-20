@@ -1,14 +1,15 @@
 use std::path::Path;
-use std::io::Error;
 use walkdir::WalkDir;
 use std::fs::File;
 use zip::ZipWriter;
 use std::io::Write;
 use std::fs;
 use crate::bbee_reader::BBeeConfig;
+use crate::manifest::generate_manifest;
+use crate::generic_result::GenericResult;
 
 // Compiles a jar into a working directory with a BBeeConfig.
-pub fn compile(working_directory: &Path, config: BBeeConfig) -> Result<(), Error> {
+pub fn compile(working_directory: &Path, config: BBeeConfig) -> GenericResult<()> {
 	let output_file = working_directory.join("build").join("libs");
 
 	fs::create_dir_all(&output_file).expect("Directories could not be created, not enough permissions.");
@@ -44,6 +45,13 @@ pub fn compile(working_directory: &Path, config: BBeeConfig) -> Result<(), Error
 
 		zip.write_all(fs::read(ref_entry.path())?.as_slice())?;
 	}
+
+	// TODO make sure that the main class is present before writing this.
+	zip.add_directory("META-INF", Default::default())?;
+	
+	zip.start_file("META-INF/MANIFEST.MF", Default::default())?;
+
+	zip.write_all(generate_manifest(&config)?.as_bytes())?;
 	
 	zip.finish()?;
 

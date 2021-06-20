@@ -5,6 +5,7 @@ mod bbee_reader;
 mod compile;
 mod generic_result;
 mod subcommands;
+mod manifest;
 
 use structopt::StructOpt;
 use std::env;
