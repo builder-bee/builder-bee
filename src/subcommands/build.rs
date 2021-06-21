@@ -5,6 +5,7 @@ use crate::bbee_reader;
 use crate::cmd::javac;
 use crate::jar::compile;
 use std::time::Instant;
+use std::fs;
 use colored::*;
 use spinners::{Spinner, Spinners};
 
@@ -29,6 +30,8 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 		)
 	);
 
+	let mut success = true;
+
 	// Walk through all the currentl .java files
 	for entry in WalkDir::new(working_directory.join("main").join("src")) {
 
@@ -40,11 +43,23 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 			continue;
 		}
 		
+		fs::create_dir_all(&working_directory.join("build").join("classes").as_path())?;
+
 		// Compile it with the javac command line.
-		javac::compile(
+		success = match javac::compile(
 			&working_directory.join("build").join("classes").as_path(),
 			&ref_entry.path()
-		).expect(format!("An unknown error occured while compiling class {}.", &ref_entry.path().display().to_string()).as_str());
+		) {
+			Ok(_) => true,
+			Err(error) => {
+				println!("\n");
+				println!("An unknown error occured while compiling class {}.", &ref_entry.path().display().to_string());
+				println!("\n");
+				println!("{}", error.output);
+
+				false
+			}
+		};
 	}
 
 	// Finally, compile the jar
@@ -54,7 +69,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 
 	println!(
 		"\nBuild {}! (Took {} seconds)",
-		"successful".green(),
+		if success { "successful".green() } else { "failed".red() },
 		(now.elapsed().as_millis() as f32 / 1000.0).to_string().white()
 	);
 

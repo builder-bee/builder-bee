@@ -19,7 +19,7 @@ pub fn run(working_directory: &Path) -> GenericResult<()> {
 
 	let jar = working_directory.join("build").join("libs").join(jar_name::jar_name(&config));
 
-	javarun::run(&jar)?;
+	javarun::javarun(&jar)?;
 
 	Ok(())
 }

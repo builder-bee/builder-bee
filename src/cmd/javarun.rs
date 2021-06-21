@@ -1,21 +1,16 @@
 use std::path::Path;
 use std::process::Command;
-use std::process::ExitStatus;
-use std::io::{Error, ErrorKind};
 use crate::generic_result::GenericResult;
+use super::run::run;
 
 /// Runs a jar file
-pub fn run(file: &Path) -> GenericResult<()> {
+pub fn javarun(file: &Path) -> GenericResult<()> {
 	
-	let status: ExitStatus = Command::new("java")
+	let commandOutput = run(Command::new("java")
 			.arg("-jar")
-			.arg(file.display().to_string())
-			.status()?;
-
-	if !status.success() {
-		return Err(Box::new(Error::new(ErrorKind::NotFound, "Command line tool java not found")))
-	}
-
+			.arg(file.display().to_string()))
+			.expect("An unknown error occured during parsing the java command.");
+	
 	Ok(())
 
 }
