@@ -1,6 +1,5 @@
 use std::path::Path;
 use std::process::Command;
-use crate::generic_result::GenericResult;
 use super::run::run;
 use std::error::Error;
 use std::fmt;
