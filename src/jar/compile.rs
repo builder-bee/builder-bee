@@ -1,14 +1,14 @@
-use crate::jar;
 use crate::bbee_reader::BBeeConfig;
 use crate::generic_result::GenericResult;
+use crate::jar;
 use crate::manifest;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use walkdir::WalkDir;
-use zip::ZipWriter;
 use zip::write::FileOptions;
+use zip::ZipWriter;
 
 // Compiles a jar into a working directory with a BBeeConfig.
 pub fn compile(working_directory: &Path, config: &BBeeConfig) -> GenericResult<()> {
@@ -17,8 +17,8 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> GenericResult<(
     fs::create_dir_all(&output_file)
         .expect("Directories could not be created, not enough permissions.");
 
-    let file =
-        File::create(&output_file.join(jar::name::generate(&config))).expect("Jar file could not be created.");
+    let file = File::create(&output_file.join(jar::name::generate(&config)))
+        .expect("Jar file could not be created.");
 
     let mut zip = ZipWriter::new(file);
 
