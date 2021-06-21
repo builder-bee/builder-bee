@@ -64,7 +64,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
     }
 
     // Finally, compile the jar
-    compile::compile(working_directory, config)?;
+    compile::compile(working_directory, &config)?;
 
     spinner.stop();
 

@@ -1,7 +1,7 @@
 use crate::bbee_reader;
 use crate::cmd::javarun;
 use crate::generic_result::GenericResult;
-use crate::jar::jar_name;
+use crate::jar;
 use crate::subcommands::build;
 use std::path::Path;
 
@@ -19,7 +19,7 @@ pub fn run(working_directory: &Path) -> GenericResult<()> {
     let jar = working_directory
         .join("build")
         .join("libs")
-        .join(jar_name::jar_name(&config));
+        .join(jar::name::generate(&config));
 
     javarun::javarun(&jar)?;
 

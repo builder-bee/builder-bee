@@ -1,4 +1,7 @@
 #![crate_name = "bbee"]
+#![warn(missing_docs)]
+
+//! The main entry point for the bbee command-line tool.
 
 mod bbee_reader;
 mod cmd;
@@ -8,7 +11,6 @@ mod manifest;
 mod subcommands;
 
 use crate::generic_result::GenericResult;
-use crate::subcommands::*;
 use std::env;
 use structopt::StructOpt;
 
@@ -32,15 +34,15 @@ fn main() -> GenericResult<()> {
     let current_path = current_path_buf.as_path();
 
     match BeeCLI::from_args() {
-        BeeCLI::Build => build::build(current_path),
+        BeeCLI::Build => subcommands::build::build(current_path),
 
-        BeeCLI::Init => init::init(current_path),
+        BeeCLI::Init => subcommands::init::init(current_path),
 
-        BeeCLI::Clean => clean::clean(current_path),
+        BeeCLI::Clean => subcommands::clean::clean(current_path),
 
-        BeeCLI::Test => test::test(current_path),
+        BeeCLI::Test => subcommands::test::test(current_path),
 
-        BeeCLI::Run => run::run(current_path),
+        BeeCLI::Run => subcommands::run::run(current_path),
     }?;
 
     Ok(())

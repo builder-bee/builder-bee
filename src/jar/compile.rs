@@ -1,23 +1,24 @@
-use super::jar_name::jar_name;
+use crate::jar;
 use crate::bbee_reader::BBeeConfig;
 use crate::generic_result::GenericResult;
-use crate::manifest::generate_manifest;
+use crate::manifest;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use walkdir::WalkDir;
 use zip::ZipWriter;
+use zip::write::FileOptions;
 
 // Compiles a jar into a working directory with a BBeeConfig.
-pub fn compile(working_directory: &Path, config: BBeeConfig) -> GenericResult<()> {
+pub fn compile(working_directory: &Path, config: &BBeeConfig) -> GenericResult<()> {
     let output_file = working_directory.join("build").join("libs");
 
     fs::create_dir_all(&output_file)
         .expect("Directories could not be created, not enough permissions.");
 
     let file =
-        File::create(&output_file.join(jar_name(&config))).expect("Jar file could not be created.");
+        File::create(&output_file.join(jar::name::generate(&config))).expect("Jar file could not be created.");
 
     let mut zip = ZipWriter::new(file);
 
@@ -38,21 +39,21 @@ pub fn compile(working_directory: &Path, config: BBeeConfig) -> GenericResult<()
             .to_string();
 
         if ref_entry.file_type().is_dir() {
-            zip.add_directory(entry_path, Default::default())?;
+            zip.add_directory(entry_path, FileOptions::default())?;
             continue;
         }
 
-        zip.start_file(entry_path, Default::default())?;
+        zip.start_file(entry_path, FileOptions::default())?;
 
         zip.write_all(fs::read(ref_entry.path())?.as_slice())?;
     }
 
     // TODO make sure that the main class is present before writing this.
-    zip.add_directory("META-INF", Default::default())?;
+    zip.add_directory("META-INF", FileOptions::default())?;
 
-    zip.start_file("META-INF/MANIFEST.MF", Default::default())?;
+    zip.start_file("META-INF/MANIFEST.MF", FileOptions::default())?;
 
-    zip.write_all(generate_manifest(&config)?.as_bytes())?;
+    zip.write_all(manifest::generate(&config)?.as_bytes())?;
 
     zip.finish()?;
 

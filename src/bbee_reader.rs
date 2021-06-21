@@ -19,7 +19,7 @@ pub struct BBeeConfigInfo {
     pub version: String,
 }
 
-/// Per-project/submodule configuration for BBee
+/// Per-project/submodule configuration for `BBee`
 pub struct BBeeConfig {
     pub info: BBeeConfigInfo,
     pub dependencies: Vec<BBeeConfigDependency>,
