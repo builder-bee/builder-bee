@@ -65,16 +65,21 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 			version: info.get("version").unwrap_or(&Value::String("1.0.0".to_string())).as_str().unwrap_or("1.0.0").to_string(),
 		},
 		
-		dependencies: if dependencies.is_some() {
-			let unwrapped_dependencies = dependencies.unwrap().as_table().unwrap();
+		dependencies: if let Some(value) = dependencies {
+			let unwrapped_dependencies = value.as_table().unwrap();
 
 			let mut vector: Vec<BBeeConfigDependency> = Vec::with_capacity(unwrapped_dependencies.len());
 
 			// EX "com.google.code.gson:gson" = { version = "2.8.7", shade = "all" }
 			for (key, value) in unwrapped_dependencies {
 				vector.push(BBeeConfigDependency {
+					// Get the name from the key
 					name: key.to_string(),
+
+					// Get the version from the table inside
 					version: value.get("version").unwrap().as_str().unwrap().to_string(),
+
+					// Shade's default is None
 					shade: value.get("version").unwrap_or(&Value::String("none".to_string())).as_str().unwrap().to_string()
 				})
 			}
