@@ -10,8 +10,6 @@ use std::time::Instant;
 use walkdir::WalkDir;
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
-    let now = Instant::now();
-
     // Need to make sure the config file is here
     if !bbee_reader::exists(working_directory) {
         panic!("Config file not found!");
@@ -27,7 +25,9 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
             config.info.name.white(),
             config.info.version.white()
         ),
-    );
+	);
+	
+	let now = Instant::now();
 
     let mut success = true;
 
@@ -75,7 +75,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
         } else {
             "failed".red()
         },
-        (now.elapsed().as_millis() as f32 / 1000.0)
+        (now.elapsed().as_millis() as f64 / 1000.0)
             .to_string()
             .white()
     );
