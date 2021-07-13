@@ -45,6 +45,7 @@ pub fn exists(working_directory: &Path) -> bool {
     working_directory.join(FILE_NAME).exists()
 }
 
+/// Get a [BBeeConfig] from a toml Value
 fn config_from_value(value: &Value) -> BBeeConfig {
     let info = value.get("info").unwrap(); // Should always be in a bbee config.
     let dependencies = value.get("dependencies");
