@@ -2,6 +2,7 @@ use crate::bbee_reader;
 use crate::cmd::javac;
 use crate::generic_result::GenericResult;
 use crate::jar::compile;
+use crate::config::config_error::ConfigNotFoundError;
 use colored::*;
 use spinners::{Spinner, Spinners};
 use std::fs;
@@ -12,12 +13,13 @@ use walkdir::WalkDir;
 pub fn build(working_directory: &Path) -> GenericResult<()> {
     // Need to make sure the config file is here
     if !bbee_reader::exists(working_directory) {
-        panic!("Config file not found!");
+        return Err(Box::new(ConfigNotFoundError {}));
     }
 
     // Read the config file
     let config = bbee_reader::read(working_directory)?;
 
+	// Fancy building spinner
     let spinner = Spinner::new(
         Spinners::Line,
         format!(
@@ -27,6 +29,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
         ),
 	);
 	
+	// Benchmark how long it takes to build the jar
 	let now = Instant::now();
 
     let mut success = true;
@@ -66,6 +69,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
     // Finally, compile the jar
     compile::compile(working_directory, &config)?;
 
+	// Stop fancy spinner
     spinner.stop();
 
     println!(

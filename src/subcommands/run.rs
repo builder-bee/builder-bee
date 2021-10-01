@@ -1,6 +1,7 @@
 use crate::bbee_reader;
 use crate::cmd::javarun;
 use crate::generic_result::GenericResult;
+use crate::config::config_error::ConfigNotFoundError;
 use crate::jar;
 use crate::subcommands::build;
 use colored::*;
@@ -10,7 +11,7 @@ use std::path::Path;
 /// Runs the generated jar.
 pub fn run(working_directory: &Path) -> GenericResult<()> {
     if !bbee_reader::exists(working_directory) {
-        panic!("Config file not found!");
+        return Err(Box::new(ConfigNotFoundError {}));
     }
 
     // Read the config file

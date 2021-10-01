@@ -9,6 +9,7 @@ mod generic_result;
 mod jar;
 mod manifest;
 mod subcommands;
+mod config;
 
 use crate::generic_result::GenericResult;
 use std::env;
