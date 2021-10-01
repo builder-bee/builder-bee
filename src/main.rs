@@ -3,7 +3,6 @@
 
 //! The main entry point for the bbee command-line tool.
 
-mod bbee_reader;
 mod cmd;
 mod generic_result;
 mod jar;

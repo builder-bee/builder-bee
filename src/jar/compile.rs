@@ -1,4 +1,4 @@
-use crate::bbee_reader::BBeeConfig;
+use crate::config::bbee_reader::BBeeConfig;
 use crate::generic_result::GenericResult;
 use crate::jar;
 use crate::manifest;

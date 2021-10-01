@@ -1,4 +1,4 @@
-use crate::bbee_reader;
+use crate::config::bbee_reader;
 use crate::cmd::javarun;
 use crate::generic_result::GenericResult;
 use crate::config::config_error::ConfigNotFoundError;
