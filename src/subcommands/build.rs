@@ -2,7 +2,6 @@ use crate::config::bbee_reader;
 use crate::cmd::javac;
 use crate::generic_result::GenericResult;
 use crate::jar::compile;
-use crate::config::config_error::ConfigNotFoundError;
 use colored::*;
 use spinners::{Spinner, Spinners};
 use std::fs;
