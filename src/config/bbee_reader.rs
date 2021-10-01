@@ -1,4 +1,5 @@
 use crate::generic_result::GenericResult;
+use crate::config::config_error::ConfigNotFoundError;
 use std::fs;
 use std::path::Path;
 use toml::Value;
@@ -27,6 +28,11 @@ pub struct BBeeConfig {
 
 /// Reads the bbee file and outputs a conf gstruct
 pub fn read(working_directory: &Path) -> GenericResult<BBeeConfig> {
+
+	if !exists(working_directory) {
+		return Err(Box::new(ConfigNotFoundError {}));
+	}
+
     // Find where the file is
     let config_path = working_directory.join(FILE_NAME);
 

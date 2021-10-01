@@ -10,10 +10,6 @@ use std::path::Path;
 
 /// Runs the generated jar.
 pub fn run(working_directory: &Path) -> GenericResult<()> {
-    if !bbee_reader::exists(working_directory) {
-        return Err(Box::new(ConfigNotFoundError {}));
-    }
-
     // Read the config file
     let config = bbee_reader::read(working_directory)?;
 

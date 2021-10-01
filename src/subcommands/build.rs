@@ -45,11 +45,6 @@ impl Display for JavaBuildError {
 impl Error for JavaBuildError {}
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
-    // Need to make sure the config file is here
-    if !bbee_reader::exists(working_directory) {
-        return Err(Box::new(ConfigNotFoundError {}));
-    }
-
     // Read the config file
     let config = bbee_reader::read(working_directory)?;
 
