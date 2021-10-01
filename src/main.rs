@@ -29,7 +29,17 @@ enum BeeCLI {
     Run,
 }
 
-fn main() -> GenericResult<()> {
+fn main() {
+	match main_err() {
+		Ok(_) => true,
+		Err(error) => {
+			println!("{}", error);
+			true
+		}
+	};
+}
+
+fn main_err() -> GenericResult<()> {
     let current_path_buf = env::current_dir().expect("Can not access current working directory!");
     let current_path = current_path_buf.as_path();
 

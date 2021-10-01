@@ -9,6 +9,40 @@ use std::fs;
 use std::path::Path;
 use std::time::Instant;
 use walkdir::WalkDir;
+use std::fmt;
+use std::fmt::Display;
+use std::error::Error;
+
+/// Represents an error that should be given if the config file is not found
+#[derive(Debug, Clone)]
+pub struct JavaBuildError {
+	pub class_file_name: String,
+	pub compile_error_output: String
+}
+
+impl Display for JavaBuildError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "\n")?;
+		write!(
+			f,
+			"An error occured while compiling class {}.",
+			self.class_file_name
+		)?;
+
+		write!(f, "\n")?;
+		write!(f, "{}", self.compile_error_output)?;
+
+		write!(
+			f,
+			"\nBuild {}.",
+			"failed".red()
+		)?;
+
+		Ok(())
+    }
+}
+
+impl Error for JavaBuildError {}
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
     // Need to make sure the config file is here
@@ -32,8 +66,6 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	// Benchmark how long it takes to build the jar
 	let now = Instant::now();
 
-    let mut success = true;
-
     // Walk through all the currentl .java files
     for entry in WalkDir::new(working_directory.join("main").join("src")) {
         // Get a reference of the entry
@@ -47,21 +79,18 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
         fs::create_dir_all(&working_directory.join("build").join("classes").as_path())?;
 
         // Compile it with the javac command line.
-        success = match javac::compile(
+        match javac::compile(
             &working_directory.join("build").join("classes").as_path(),
             &ref_entry.path(),
         ) {
             Ok(_) => true,
             Err(error) => {
-                println!("\n");
-                println!(
-                    "An unknown error occured while compiling class {}.",
-                    &ref_entry.path().display().to_string()
-                );
-                println!("\n");
-                println!("{}", error.output);
+				spinner.stop();
 
-                false
+                return Err(Box::new(JavaBuildError {
+					class_file_name: ref_entry.path().display().to_string(),
+					compile_error_output: error.output
+				}))
             }
         };
     }
@@ -74,11 +103,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 
     println!(
         "\nBuild {}! (Took {} seconds)",
-        if success {
-            "successful".green()
-        } else {
-            "failed".red()
-        },
+        "successful".green(),
         (now.elapsed().as_millis() as f64 / 1000.0)
             .to_string()
             .white()
