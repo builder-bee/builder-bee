@@ -10,16 +10,16 @@ use std::path::Path;
 /// Runs the generated jar.
 pub fn run(working_directory: &Path) -> GenericResult<()> {
     // Read the config file
-    let config = bbee_reader::read(working_directory)?;
+    let config = bbee_reader::find_and_read(working_directory)?;
 
-    build::build(working_directory)?;
+    build::build(&config.directory)?;
 
 	let now = Instant::now();
 
-    let jar = working_directory
+    let jar = &config.directory
         .join("build")
         .join("libs")
-        .join(jar::name::generate(&config));
+        .join(jar::name::generate(&config.toml_config));
 
     let success = match javarun::javarun(&jar) {
 		Ok(log) => {

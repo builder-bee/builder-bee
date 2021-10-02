@@ -45,15 +45,15 @@ impl Error for JavaBuildError {}
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
     // Read the config file
-    let config = bbee_reader::read(working_directory)?;
+    let config = bbee_reader::find_and_read(working_directory)?;
 
 	// Fancy building spinner
     let spinner = Spinner::new(
         Spinners::Line,
         format!(
             "Building {} -- v{}...",
-            config.info.name.white(),
-            config.info.version.white()
+            config.toml_config.info.name.white(),
+            config.toml_config.info.version.white()
         ),
 	);
 	
@@ -61,7 +61,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 	let now = Instant::now();
 
     // Walk through all the currentl .java files
-    for entry in WalkDir::new(working_directory.join("main").join("src")) {
+    for entry in WalkDir::new(config.directory.join("main").join("src")) {
         // Get a reference of the entry
         let ref_entry = &entry?;
 
@@ -70,7 +70,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
             continue;
         }
 
-        fs::create_dir_all(&working_directory.join("build").join("classes").as_path())?;
+        fs::create_dir_all(&config.directory.join("build").join("classes").as_path())?;
 
         // Compile it with the javac command line.
         match javac::compile(
@@ -90,7 +90,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
     }
 
     // Finally, compile the jar
-    compile::compile(working_directory, &config)?;
+    compile::compile(working_directory, &config.toml_config)?;
 
 	// Stop fancy spinner
     spinner.stop();

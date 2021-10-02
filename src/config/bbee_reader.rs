@@ -2,6 +2,7 @@ use crate::generic_result::GenericResult;
 use crate::config::config_error::ConfigNotFoundError;
 use std::fs;
 use std::path::Path;
+use std::path::PathBuf;
 use toml::Value;
 use std::fmt::Display;
 use std::fmt::Formatter;
@@ -39,18 +40,31 @@ pub struct BBeeConfig {
     pub dependencies: Vec<BBeeConfigDependency>,
 }
 
+pub struct Config {
+	pub toml_config: BBeeConfig,
+	pub directory: PathBuf
+}
+
 /// Reads the bbee file and outputs a conf gstruct
-pub fn read(working_directory: &Path) -> GenericResult<BBeeConfig> {
+pub fn find_and_read(working_directory: &Path) -> GenericResult<Config> {
 
-	if find_config(working_directory) == Option::None {
-		return Err(Box::new(ConfigNotFoundError {}));
-	}
+	let config = find_config(working_directory);
+	
+	if config == Option::None {
+		return Err(Box::new(ConfigNotFoundError { project_directory_name: working_directory.to_str().unwrap().to_string() }));
+	};
 
-    // Find where the file is
-    let config_path = working_directory.join(FILE_NAME);
+	let config = config.unwrap();
 
-    // Read it using serde's serialization and TOML
-    let config_toml = &fs::read_to_string(config_path)?.parse::<Value>()?;
+   return Ok(Config {
+	   toml_config: read(config.as_path())?,
+	   directory: config.parent().unwrap().to_path_buf()
+	});
+}
+
+pub fn read(config: &Path) -> GenericResult<BBeeConfig> {
+	// Read it using serde's serialization and TOML
+    let config_toml = &fs::read_to_string(config)?.parse::<Value>()?;
 
     // Generate the config object from the Value
     let config = config_from_value(config_toml);
@@ -59,11 +73,13 @@ pub fn read(working_directory: &Path) -> GenericResult<BBeeConfig> {
     Ok(config)
 }
 
-pub fn find_config(current_directory: &Path) -> Option<&Path> {
+pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 
-	let mut directory = Path::new(&current_directory.to_path_buf());
+	let buf = current_directory.to_path_buf();
 
-	let mut config_file: Option<&Path> = Option::None;
+	let mut directory = Path::new(&buf);
+
+	let mut config_file: Option<PathBuf> = grab_in_directory(directory);
 
 	while config_file == Option::None {
 		directory = directory.parent().unwrap();
@@ -76,9 +92,9 @@ pub fn find_config(current_directory: &Path) -> Option<&Path> {
 }
 
 /// Check if the bbee config is in this directory
-pub fn grab_in_directory(directory: &Path) -> Option<&Path> {
+pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 
-	let path = directory.join(FILE_NAME).as_path();
+	let path = directory.join(FILE_NAME);
 
 	return if path.exists() {
 		Option::Some(path)
