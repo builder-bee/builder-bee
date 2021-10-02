@@ -1,5 +1,5 @@
 use crate::config::bbee_reader;
-use crate::cmd::javarun;
+use crate::cmd::runjar;
 use crate::generic_result::GenericResult;
 use crate::jar;
 use crate::subcommands::build;
@@ -21,7 +21,7 @@ pub fn run(working_directory: &Path) -> GenericResult<()> {
         .join("libs")
         .join(jar::name::generate(&config.toml_config));
 
-    let success = match javarun::javarun(&jar) {
+    let success = match runjar::javarun(&jar) {
 		Ok(log) => {
 			println!("{}", log);
 			
