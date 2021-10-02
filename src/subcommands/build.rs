@@ -74,7 +74,7 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 
         // Compile it with the javac command line.
         match javac::compile(
-            &working_directory.join("build").join("classes").as_path(),
+            &config.directory.join("build").join("classes").as_path(),
             &ref_entry.path(),
         ) {
             Ok(_) => true,
@@ -90,10 +90,12 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
     }
 
     // Finally, compile the jar
-    compile::compile(working_directory, &config.toml_config)?;
+    compile::compile(&config.directory, &config.toml_config)?;
 
 	// Stop fancy spinner
     spinner.stop();
+
+	print!("\r\r");
 
     println!(
         "\nBuild {}! (Took {} seconds)",

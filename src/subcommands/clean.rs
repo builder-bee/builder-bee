@@ -5,11 +5,10 @@ use std::path::Path;
 
 /// Remove the build directory from the `working_directory`
 pub fn clean(working_directory: &Path) -> GenericResult<()> {
-    if bbee_reader::find_config(working_directory) == Option::None {
-        panic!("Config file not found!");
-    }
 
-    fs::remove_dir_all(working_directory.join("build"))?;
+	let config = bbee_reader::find_and_read(working_directory)?;
+
+    fs::remove_dir_all(config.directory.join("build"))?;
 
     Ok(())
 }
