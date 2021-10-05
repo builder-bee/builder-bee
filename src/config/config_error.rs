@@ -9,7 +9,7 @@ pub struct ConfigNotFoundError {
 }
 
 impl Display for ConfigNotFoundError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Can not find bbee.toml in {}", self.project_directory_name)
-    }
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "Can not find bbee.toml in {}", self.project_directory_name)
+	}
 }

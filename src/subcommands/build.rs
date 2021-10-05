@@ -20,7 +20,7 @@ pub struct JavaBuildError {
 }
 
 impl Display for JavaBuildError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "\n")?;
 		write!(
 			f,
@@ -38,72 +38,72 @@ impl Display for JavaBuildError {
 		)?;
 
 		Ok(())
-    }
+	}
 }
 
 impl Error for JavaBuildError {}
 
 pub fn build(working_directory: &Path) -> GenericResult<()> {
-    // Read the config file
-    let config = bbee_reader::find_and_read(working_directory)?;
+	// Read the config file
+	let config = bbee_reader::find_and_read(working_directory)?;
 
 	// Fancy building spinner
-    let spinner = Spinner::new(
-        Spinners::Line,
-        format!(
-            "Building {} -- v{}...",
-            config.toml_config.info.name.white(),
-            config.toml_config.info.version.white()
-        ),
+	let spinner = Spinner::new(
+		Spinners::Line,
+		format!(
+			"Building {} -- v{}...",
+			config.toml_config.info.name.white(),
+			config.toml_config.info.version.white()
+		),
 	);
 	
 	// Benchmark how long it takes to build the jar
 	let now = Instant::now();
 
-    // Walk through all the currentl .java files
-    for entry in WalkDir::new(config.directory.join("main").join("src")) {
-        // Get a reference of the entry
-        let ref_entry = &entry?;
+	// Walk through all the currentl .java files
+	for entry in WalkDir::new(config.directory.join("main").join("src")) {
+		// Get a reference of the entry
+		let ref_entry = &entry?;
 
-        // Ignore directories
-        if ref_entry.file_type().is_dir() {
-            continue;
-        }
+		// Ignore directories
+		if ref_entry.file_type().is_dir() {
+			continue;
+		}
 
-        fs::create_dir_all(&config.directory.join("build").join("classes").as_path())?;
+		fs::create_dir_all(&config.directory.join("build").join("classes").as_path())?;
 
-        // Compile it with the javac command line.
-        match javac::compile(
-            &config.directory.join("build").join("classes").as_path(),
-            &ref_entry.path(),
-        ) {
-            Ok(_) => true,
-            Err(error) => {
+		// Compile it with the javac command line.
+		match javac::compile(
+			&config.directory.join("build").join("classes").as_path(),
+			&ref_entry.path(),
+		) {
+			Ok(_) => true,
+			Err(error) => {
 				spinner.stop();
 
-                return Err(Box::new(JavaBuildError {
+				return Err(Box::new(JavaBuildError {
 					class_file_name: ref_entry.path().display().to_string(),
 					compile_error_output: error.output
 				}))
-            }
-        };
-    }
+			}
+		};
+	}
 
-    // Finally, compile the jar
-    compile::compile(&config.directory, &config.toml_config)?;
+	// Finally, compile the jar
+	compile::compile(&config.directory, &config.toml_config)?;
 
 	// Stop fancy spinner
-    spinner.stop();
+	spinner.stop();
 
 	print!("\r\r");
 
-    println!(
-        "\nBuild {}! (Took {} seconds)",
-        "successful".green(),
-        (now.elapsed().as_millis() as f64 / 1000.0)
-            .to_string()
-            .white()
-    );
+	println!(
+		"\nBuild {}! (Took {} seconds)",
+		"successful".green(),
+		(now.elapsed().as_millis() as f64 / 1000.0)
+			.to_string()
+			.white()
+	);
 
-    Ok(())
+	Ok(())
 }

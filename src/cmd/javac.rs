@@ -7,13 +7,13 @@ use std::process::Command;
 
 #[derive(Debug, Clone)]
 pub struct JavaCompileError {
-    pub output: String,
+	pub output: String,
 }
 
 impl Display for JavaCompileError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Javac error: {}", self.output) // user-facing output
-    }
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "Javac error: {}", self.output) // user-facing output
+	}
 }
 
 impl Error for JavaCompileError {}
@@ -23,17 +23,17 @@ impl Error for JavaCompileError {}
 /// It will generate a file at `/build/classes/HelloWorld.class`
 /// With the resulting compiled class.
 pub fn compile(target: &Path, file: &Path) -> Result<(), Box<JavaCompileError>> {
-    let command_output = run(Command::new("javac")
+	let command_output = run(Command::new("javac")
 		.arg(file.display().to_string())
 		.arg("-d")
 		.arg(target.display().to_string()))
 		.unwrap();
 
-    if command_output.status.success() {
-        Ok(())
-    } else {
-        Err(Box::new(JavaCompileError {
-            output: command_output.stderr,
-        }))
-    }
+	if command_output.status.success() {
+		Ok(())
+	} else {
+		Err(Box::new(JavaCompileError {
+			output: command_output.stderr,
+		}))
+	}
 }

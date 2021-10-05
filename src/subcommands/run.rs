@@ -9,19 +9,19 @@ use std::path::Path;
 
 /// Runs the generated jar.
 pub fn run(working_directory: &Path) -> GenericResult<()> {
-    // Read the config file
-    let config = bbee_reader::find_and_read(working_directory)?;
+	// Read the config file
+	let config = bbee_reader::find_and_read(working_directory)?;
 
-    build::build(&config.directory)?;
+	build::build(&config.directory)?;
 
 	let now = Instant::now();
 
-    let jar = &config.directory
-        .join("build")
-        .join("libs")
-        .join(jar::name::generate(&config.toml_config));
+	let jar = &config.directory
+		.join("build")
+		.join("libs")
+		.join(jar::name::generate(&config.toml_config));
 
-    let success = match runjar::javarun(&jar) {
+	let success = match runjar::javarun(&jar) {
 		Ok(log) => {
 			println!("{}", log);
 			
@@ -36,16 +36,16 @@ pub fn run(working_directory: &Path) -> GenericResult<()> {
 	};
 
 	println!(
-        "Run {}! (Took {} seconds)",
-        if success {
-            "successful".green()
-        } else {
-            "failed".red()
-        },
-        (now.elapsed().as_millis() as f64 / 1000.0)
-            .to_string()
-            .white()
-    );
+		"Run {}! (Took {} seconds)",
+		if success {
+			"successful".green()
+		} else {
+			"failed".red()
+		},
+		(now.elapsed().as_millis() as f64 / 1000.0)
+			.to_string()
+			.white()
+	);
 
-    Ok(())
+	Ok(())
 }

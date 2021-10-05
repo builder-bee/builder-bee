@@ -8,7 +8,7 @@ pub fn clean(working_directory: &Path) -> GenericResult<()> {
 
 	let config = bbee_reader::find_and_read(working_directory)?;
 
-    fs::remove_dir_all(config.directory.join("build"))?;
+	fs::remove_dir_all(config.directory.join("build"))?;
 
-    Ok(())
+	Ok(())
 }
