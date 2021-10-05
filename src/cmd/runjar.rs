@@ -4,6 +4,7 @@ use std::fmt;
 use std::fmt::Display;
 use std::path::Path;
 use std::process::Command;
+use expect_macro::expect;
 
 #[derive(Debug, Clone)]
 pub struct JavaRunError {
@@ -21,10 +22,12 @@ impl Error for JavaRunError {}
 /// Runs a jar file
 pub fn javarun(file: &Path) -> Result<String, Box<JavaRunError>> {
 
-	let command_output = run(Command::new("java")
-		.arg("-jar")
-		.arg(file.display().to_string()))
-    	.expect("An unknown error occured during parsing the java command.");
+	let command_output = expect!(
+		run(Command::new("java")
+			.arg("-jar")
+			.arg(file.display().to_string())),
+			"An unknown error occured during parsing the java command."
+		);
 
     if command_output.status.success() {
         Ok(command_output.stdout)
