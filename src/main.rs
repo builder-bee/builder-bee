@@ -32,10 +32,10 @@ enum BeeCLI {
 
 fn main() {
 	match main_err() {
-		Ok(_) => true,
+		Ok(_) => (),
 		Err(error) => {
 			println!("{}", error);
-			true
+			()
 		}
 	};
 }
