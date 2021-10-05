@@ -36,7 +36,7 @@ fn main() {
 	match main_err() {
 		Ok(_) => (),
 		Err(error) => {
-			println!("{}", error);
+			println!("error: {}", error);
 			()
 		}
 	};
