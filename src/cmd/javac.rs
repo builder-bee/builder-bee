@@ -4,7 +4,6 @@ use std::fmt;
 use std::fmt::Display;
 use std::path::Path;
 use std::process::Command;
-use expect_macro::expect;
 
 #[derive(Debug, Clone)]
 pub struct JavaCompileError {
@@ -24,13 +23,11 @@ impl Error for JavaCompileError {}
 /// It will generate a file at `/build/classes/HelloWorld.class`
 /// With the resulting compiled class.
 pub fn compile(target: &Path, file: &Path) -> Result<(), Box<JavaCompileError>> {
-    let command_output = expect!(
-		run(Command::new("javac")
-			.arg(file.display().to_string())
-			.arg("-d")
-			.arg(target.display().to_string())),
-			"An unknown error occured during parsing the javac command."
-		);
+    let command_output = run(Command::new("javac")
+		.arg(file.display().to_string())
+		.arg("-d")
+		.arg(target.display().to_string()))
+		.unwrap();
 
     if command_output.status.success() {
         Ok(())

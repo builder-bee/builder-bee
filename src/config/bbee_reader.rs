@@ -8,6 +8,7 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt;
 use std::option::Option;
+use expect_macro::expect;
 
 static FILE_NAME: &str = "bbee.toml";
 
@@ -54,7 +55,7 @@ pub fn find_and_read(working_directory: &Path) -> GenericResult<Config> {
 		return Err(Box::new(ConfigNotFoundError { project_directory_name: working_directory.to_str().unwrap().to_string() }));
 	};
 
-	let config = config.unwrap();
+	let config = expect!(config, "Could not get config.");
 
    return Ok(Config {
 	   toml_config: read(config.as_path())?,
@@ -82,7 +83,11 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 	let mut config_file: Option<PathBuf> = grab_in_directory(directory);
 
 	while config_file == Option::None {
-		directory = directory.parent().unwrap();
+		directory = expect!(
+			directory.parent(),
+			"Could not find bbee.toml in {} or any of its parents",
+			current_directory.to_str().unwrap()
+		);
 
 		config_file = grab_in_directory(directory);
 	};

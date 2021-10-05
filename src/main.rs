@@ -31,6 +31,8 @@ enum BeeCLI {
 }
 
 fn main() {
+	better_panic::install();
+
 	match main_err() {
 		Ok(_) => (),
 		Err(error) => {
@@ -44,7 +46,7 @@ fn main_err() -> GenericResult<()> {
     let current_path_buf = 
 		expect!(
 			env::current_dir(),
-			"Can not access current working directory!"
+			"Can not access current working directory!",
 		);
     let current_path = current_path_buf.as_path();
 
