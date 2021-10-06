@@ -1,6 +1,8 @@
 use crate::config::bbee_reader;
 use crate::cmd::javac;
-use crate::generic_result::GenericResult;
+use anyhow::Result;
+use anyhow::anyhow;
+use thiserror::Error;
 use crate::jar::compile;
 use colored::*;
 use spinners::{Spinner, Spinners};
@@ -8,42 +10,16 @@ use std::fs;
 use std::path::Path;
 use std::time::Instant;
 use walkdir::WalkDir;
-use std::fmt;
-use std::fmt::Display;
-use std::error::Error;
 
 /// Represents an error that should be given if the config file is not found
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Error)]
+#[error("\nAn error has occured while compiling class {class_file_name}.\n{compile_error_output}\nBuild {}.", "failed".red())]
 pub struct JavaBuildError {
 	pub class_file_name: String,
 	pub compile_error_output: String
 }
 
-impl Display for JavaBuildError {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "\n")?;
-		write!(
-			f,
-			"An error occured while compiling class {}.",
-			self.class_file_name
-		)?;
-
-		write!(f, "\n")?;
-		write!(f, "{}", self.compile_error_output)?;
-
-		write!(
-			f,
-			"\nBuild {}.",
-			"failed".red()
-		)?;
-
-		Ok(())
-	}
-}
-
-impl Error for JavaBuildError {}
-
-pub fn build(working_directory: &Path) -> GenericResult<()> {
+pub fn build(working_directory: &Path) -> Result<()> {
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
 
@@ -81,10 +57,10 @@ pub fn build(working_directory: &Path) -> GenericResult<()> {
 			Err(error) => {
 				spinner.stop();
 
-				return Err(Box::new(JavaBuildError {
+				return Err(anyhow!(JavaBuildError {
 					class_file_name: ref_entry.path().display().to_string(),
 					compile_error_output: error.output
-				}))
+				}));
 			}
 		};
 	}

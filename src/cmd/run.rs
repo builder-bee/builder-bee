@@ -1,7 +1,7 @@
-use crate::generic_result::GenericResult;
 use std::process::Command;
 use std::process::ExitStatus;
 use std::str;
+use anyhow::Result;
 
 pub struct CommandOutput {
 	pub status: ExitStatus,
@@ -9,7 +9,7 @@ pub struct CommandOutput {
 	pub stderr: String,
 }
 
-pub fn run(command: &mut Command) -> GenericResult<CommandOutput> {
+pub fn run(command: &mut Command) -> Result<CommandOutput> {
 	let output = command.output()?;
 
 	Ok(CommandOutput {

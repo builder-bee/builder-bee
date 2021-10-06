@@ -1,40 +1,35 @@
 use super::run::run;
-use std::error::Error;
-use std::fmt;
-use std::fmt::Display;
 use std::path::Path;
 use std::process::Command;
-use expect_macro::expect;
+use anyhow::Result;
+use thiserror::Error;
 
-#[derive(Debug, Clone)]
-pub struct JavaRunError {
-	pub output: String,
-}
-
-impl Display for JavaRunError {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "Javac error: {}", self.output) // user-facing output
+#[derive(Debug, Clone, Error)]
+pub enum JavaRunError {
+	#[error("No output was found")]
+	OutputNotFound,
+	#[error("Javac error: {output}")]
+	CommandFailed {
+		output: String
 	}
 }
 
-impl Error for JavaRunError {}
-
 /// Runs a jar file
-pub fn javarun(file: &Path) -> Result<String, Box<JavaRunError>> {
+pub fn javarun(file: &Path) -> Result<String, JavaRunError> {
 
-	let command_output = expect!(
-		run(Command::new("java")
-			.arg("-jar")
-			.arg(file.display().to_string())),
-			"An unknown error occured during parsing the java command."
-		);
+	let command = run(Command::new("java")
+		.arg("-jar")
+		.arg(file.display().to_string()));
+
+	let command_output = match command {
+		Ok(value) => value,
+		Err(_) => return Err(JavaRunError::OutputNotFound)
+	};
 
 	if command_output.status.success() {
 		Ok(command_output.stdout)
 	} else {
-		Err(Box::new(JavaRunError {
-			output: command_output.stderr,
-		}))
+		Err(JavaRunError::CommandFailed { output: command_output.stderr })
 	}
 
 }

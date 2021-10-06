@@ -4,13 +4,12 @@
 //! The main entry point for the bbee command-line tool.
 
 mod cmd;
-mod generic_result;
 mod jar;
 mod manifest;
 mod subcommands;
 mod config;
+use anyhow::Result;
 
-use crate::generic_result::GenericResult;
 use std::env;
 use structopt::StructOpt;
 use expect_macro::expect;
@@ -42,7 +41,7 @@ fn main() {
 	};
 }
 
-fn main_err() -> GenericResult<()> {
+fn main_err() -> Result<()> {
 	let current_path_buf = 
 		expect!(
 			env::current_dir(),

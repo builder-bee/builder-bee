@@ -1,5 +1,6 @@
-use crate::generic_result::GenericResult;
 use crate::config::config_error::ConfigNotFoundError;
+use anyhow::Result;
+use anyhow::anyhow;
 use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
@@ -47,12 +48,14 @@ pub struct Config {
 }
 
 /// Reads the bbee file and outputs a conf gstruct
-pub fn find_and_read(working_directory: &Path) -> GenericResult<Config> {
+pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 
 	let config = find_config(working_directory);
 	
 	if config == Option::None {
-		return Err(Box::new(ConfigNotFoundError { project_directory_name: working_directory.to_str().unwrap().to_string() }));
+		return Err(anyhow!(ConfigNotFoundError { 
+			project_directory_name: working_directory.to_str().unwrap().to_string()
+		}));
 	};
 
 	let config = expect!(config, "Could not get config.");
@@ -63,7 +66,7 @@ pub fn find_and_read(working_directory: &Path) -> GenericResult<Config> {
 	});
 }
 
-pub fn read(config: &Path) -> GenericResult<BBeeConfig> {
+pub fn read(config: &Path) -> Result<BBeeConfig> {
 	// Read it using serde's serialization and TOML
 	let config_toml = &fs::read_to_string(config)?.parse::<Value>()?;
 

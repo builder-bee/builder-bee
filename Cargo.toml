@@ -18,6 +18,7 @@ expect_macro = "0.2.1"
 thiserror = "1.0.29"
 better-panic = "0.2.0"
 relative-path = "1.5.0"
+anyhow = "1.0.44"
 
 [profile.release]
 lto = "fat"

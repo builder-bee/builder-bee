@@ -1,7 +1,7 @@
 use crate::config::bbee_reader::BBeeConfig;
-use crate::generic_result::GenericResult;
 use crate::jar;
 use crate::manifest;
+use anyhow::Result;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -12,7 +12,7 @@ use expect_macro::expect;
 use zip::ZipWriter;
 
 // Compiles a jar into a working directory with a BBeeConfig.
-pub fn compile(working_directory: &Path, config: &BBeeConfig) -> GenericResult<()> {
+pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 	let output_file = working_directory.join("build").join("libs");
 
 	expect!(
