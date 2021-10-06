@@ -8,11 +8,10 @@ mod jar;
 mod manifest;
 mod subcommands;
 mod config;
-use anyhow::Result;
+use anyhow::{Context,Result};
 
 use std::env;
 use structopt::StructOpt;
-use expect_macro::expect;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
@@ -42,11 +41,9 @@ fn main() {
 }
 
 fn main_err() -> Result<()> {
-	let current_path_buf = 
-		expect!(
-			env::current_dir(),
-			"Can not access current working directory!",
-		);
+	let current_path_buf = env::current_dir()
+		.context("Can not access current working directory!")?;
+	
 	let current_path = current_path_buf.as_path();
 
 	match BeeCLI::from_args() {

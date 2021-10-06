@@ -1,5 +1,5 @@
 use crate::config::config_error::ConfigNotFoundError;
-use anyhow::Result;
+use anyhow::{Context,Result};
 use anyhow::anyhow;
 use std::fs;
 use std::path::Path;
@@ -9,7 +9,6 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt;
 use std::option::Option;
-use expect_macro::expect;
 
 static FILE_NAME: &str = "bbee.toml";
 
@@ -58,7 +57,7 @@ pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 		}));
 	};
 
-	let config = expect!(config, "Could not get config.");
+	let config = config.context("Could not get config.")?;
 
    return Ok(Config {
 	   toml_config: read(config.as_path())?,
@@ -86,11 +85,10 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 	let mut config_file: Option<PathBuf> = grab_in_directory(directory);
 
 	while config_file == Option::None {
-		directory = expect!(
-			directory.parent(),
+		directory = directory.parent().with_context(|| format!(
 			"Could not find bbee.toml in {} or any of its parents",
 			current_directory.to_str().unwrap()
-		);
+		)).unwrap();
 
 		config_file = grab_in_directory(directory);
 	};

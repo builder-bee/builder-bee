@@ -1,29 +1,24 @@
 use crate::config::bbee_reader::BBeeConfig;
 use crate::jar;
 use crate::manifest;
-use anyhow::Result;
+use anyhow::{Context,Result};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use walkdir::WalkDir;
 use zip::write::FileOptions;
-use expect_macro::expect;
 use zip::ZipWriter;
 
 // Compiles a jar into a working directory with a BBeeConfig.
 pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 	let output_file = working_directory.join("build").join("libs");
 
-	expect!(
-		fs::create_dir_all(&output_file),
-		"Directories could not be created, not enough permissions."
-	);
+	fs::create_dir_all(&output_file)
+		.context("Directories could not be created, not enough permissions.")?;
 
-	let file = expect!(
-		File::create(&output_file.join(jar::name::generate(&config))),
-		"Jar file could not be created."
-	);
+	let file = File::create(&output_file.join(jar::name::generate(&config)))
+		.context("Jar file could not be created.")?;
 
 	let mut zip = ZipWriter::new(file);
 
@@ -49,15 +44,12 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 			continue;
 		}
 
-		expect!(
-			zip.start_file(entry_path, options),
-			"Could not create entry path"
-		);
+		zip.start_file(entry_path, options)
+			.context("Could not create entry path")?;
 
-		expect!(
-			zip.write_all(&*fs::read(ref_entry.path())?),
-			"Could not write file {} to jar.", ref_entry.path().to_str().unwrap()
-		)
+		zip.write_all(&*fs::read(ref_entry.path())?).with_context(||
+			format!("Could not write file {} to jar.", ref_entry.path().to_str().unwrap())
+		)?;
 	}
 
 	// TODO make sure that the main class is present before writing this.
@@ -67,10 +59,10 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 
 	zip.write_all(manifest::generate(&config)?.as_bytes())?;
 
-	expect!(
-		zip.finish(),
-		"Could not finish writing jar file in {}", working_directory.to_str().unwrap()
-	);
+	zip.finish()
+		.with_context(|| format!(
+			"Could not finish writing jar file in {}", working_directory.to_str().unwrap()
+		))?;
 
 	Ok(())
 }

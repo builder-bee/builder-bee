@@ -19,17 +19,13 @@ pub fn javarun(file: &Path) -> Result<String, JavaRunError> {
 
 	let command = run(Command::new("java")
 		.arg("-jar")
-		.arg(file.display().to_string()));
+		.arg(file.display().to_string()))
+		.map_err(|_| JavaRunError::OutputNotFound)?;
 
-	let command_output = match command {
-		Ok(value) => value,
-		Err(_) => return Err(JavaRunError::OutputNotFound)
-	};
-
-	if command_output.status.success() {
-		Ok(command_output.stdout)
+	if command.status.success() {
+		Ok(command.stdout)
 	} else {
-		Err(JavaRunError::CommandFailed { output: command_output.stderr })
+		Err(JavaRunError::CommandFailed { output: command.stderr })
 	}
 
 }
