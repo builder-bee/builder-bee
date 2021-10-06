@@ -21,7 +21,7 @@ pub fn run(working_directory: &Path) -> Result<()> {
 		.join("libs")
 		.join(jar::name::generate(&config.toml_config));
 
-	let success = match runjar::javarun(&jar) {
+	let success = match runjar::javarun(jar) {
 		Ok(log) => {
 			println!("{}", log);
 			true

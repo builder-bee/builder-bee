@@ -50,8 +50,8 @@ pub fn build(working_directory: &Path) -> Result<()> {
 
 		// Compile it with the javac command line.
 		match javac::compile(
-			&config.directory.join("build").join("classes").as_path(),
-			&ref_entry.path(),
+			config.directory.join("build").join("classes").as_path(),
+			ref_entry.path(),
 		) {
 			Ok(_) => true,
 			Err(error) => {

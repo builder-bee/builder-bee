@@ -93,7 +93,7 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 		config_file = grab_in_directory(directory);
 	};
 
-	return config_file
+	config_file
 
 }
 
@@ -102,7 +102,7 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 
 	let path = directory.join(FILE_NAME);
 
-	return if path.exists() {
+	if path.exists() {
 		Option::Some(path)
 	} else {
 		Option::None

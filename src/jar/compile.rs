@@ -17,7 +17,7 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 	fs::create_dir_all(&output_file)
 		.context("Directories could not be created, not enough permissions.")?;
 
-	let file = File::create(&output_file.join(jar::name::generate(&config)))
+	let file = File::create(&output_file.join(jar::name::generate(config)))
 		.context("Jar file could not be created.")?;
 
 	let mut zip = ZipWriter::new(file);
@@ -57,7 +57,7 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 
 	zip.start_file("META-INF/MANIFEST.MF", options)?;
 
-	zip.write_all(manifest::generate(&config)?.as_bytes())?;
+	zip.write_all(manifest::generate(config)?.as_bytes())?;
 
 	zip.finish()
 		.with_context(|| format!(
