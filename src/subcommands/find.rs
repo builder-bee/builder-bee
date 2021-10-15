@@ -9,5 +9,5 @@ pub fn find(working_directory: &Path) -> Result<()> {
 		None => println!("No config found."),
 	};
 
-	return Ok(());
+	Ok(())
 }

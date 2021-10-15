@@ -71,7 +71,6 @@ pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 	});
 }
 
-#[must_use]
 pub fn read(config: &Path) -> Result<BBeeConfig> {
 	// Read it using serde's serialization and TOML
 	let config_toml = &fs::read_to_string(config)?.parse::<Value>()?;
