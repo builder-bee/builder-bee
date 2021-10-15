@@ -1,12 +1,9 @@
-use crate::config::config_error::ConfigNotFoundError;
-use anyhow::{Context,Result};
-use anyhow::anyhow;
+use crate::config::error::ConfigNotFoundError;
+use anyhow::{anyhow,Context,Result};
 use std::fs;
-use std::path::Path;
-use std::path::PathBuf;
+use std::path::{PathBuf,Path};
 use toml::Value;
-use std::fmt::Display;
-use std::fmt::Formatter;
+use std::fmt::{Formatter,Display};
 use std::fmt;
 use std::option::Option;
 
@@ -53,7 +50,8 @@ pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 	
 	if config == Option::None {
 		return Err(anyhow!(ConfigNotFoundError { 
-			project_directory_name: working_directory.to_str().unwrap().to_string()
+			project_directory_name: working_directory.to_str()
+				.context("Could not get the working directory")?.to_string()
 		}));
 	};
 
@@ -76,6 +74,7 @@ pub fn read(config: &Path) -> Result<BBeeConfig> {
 	Ok(config)
 }
 
+#[must_use]
 pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 
 	let buf = current_directory.to_path_buf();
@@ -109,7 +108,7 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 	}
 }
 
-/// Get a [BBeeConfig] from a toml Value
+/// Get a `BBeeConfig` from a toml Value
 fn config_from_value(value: &Value) -> BBeeConfig {
 	let info = value.get("info").unwrap(); // Should always be in a bbee config.
 	let dependencies = value.get("dependencies");
@@ -157,7 +156,7 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 						.as_str()
 						.unwrap()
 						.to_string(),
-				})
+				});
 			}
 
 			vector

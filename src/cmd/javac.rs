@@ -1,39 +1,35 @@
 use super::run::run;
-use std::error::Error;
-use std::fmt;
-use std::fmt::Display;
+use anyhow::{Result,Context};
+use thiserror::Error;
 use std::path::Path;
 use std::process::Command;
 
-#[derive(Debug, Clone)]
+#[derive(Error, Debug, Clone)]
+#[error("Javac error: {output}")]
 pub struct JavaCompileError {
 	pub output: String,
 }
-
-impl Display for JavaCompileError {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "Javac error: {}", self.output) // user-facing output
-	}
-}
-
-impl Error for JavaCompileError {}
 
 /// Compiles a `file` with javac and puts it at the `target` path.
 /// For example, given `/build/classes` and `/main/src/HelloWorld.java`,
 /// It will generate a file at `/build/classes/HelloWorld.class`
 /// With the resulting compiled class.
-pub fn compile(target: &Path, file: &Path) -> Result<(), Box<JavaCompileError>> {
+pub fn compile(target: &Path, file: &Path) -> Result<()> {
 	let command_output = run(Command::new("javac")
 		.arg(file.display().to_string())
 		.arg("-d")
 		.arg(target.display().to_string()))
-		.unwrap();
+		.with_context(|| format!(
+			"Can not run command javac, file: {}, target: {}",
+			file.display().to_string(),
+			target.display().to_string()
+		))?;
 
 	if command_output.status.success() {
 		Ok(())
 	} else {
-		Err(Box::new(JavaCompileError {
+		Err(JavaCompileError {
 			output: command_output.stderr,
-		}))
+		})
 	}
 }

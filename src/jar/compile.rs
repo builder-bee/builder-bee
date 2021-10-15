@@ -57,7 +57,7 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 
 	zip.start_file("META-INF/MANIFEST.MF", options)?;
 
-	zip.write_all(manifest::generate(config)?.as_bytes())?;
+	zip.write_all(manifest::generate(config).as_bytes())?;
 
 	zip.finish()
 		.with_context(|| format!(

@@ -1,2 +1,2 @@
-pub mod config_error;
+pub mod error;
 pub mod bbee_reader;
