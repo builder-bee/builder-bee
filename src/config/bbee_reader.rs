@@ -64,7 +64,7 @@ pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 
 	return Ok(Config {
 		toml_config: read(config.as_path())?,
-		directory: config.parent().unwrap().to_path_buf(),
+		directory: config.parent().context("Could not get config")?.to_path_buf()
 	});
 }
 
@@ -97,7 +97,7 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 					current_directory.to_str().unwrap()
 				)
 			})
-			.unwrap();
+			.ok()?;
 
 		config_file = grab_in_directory(directory);
 	}
