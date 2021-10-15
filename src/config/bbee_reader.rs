@@ -97,7 +97,7 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 }
 
 /// Check if the bbee config is in this directory
-pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
+#[must_use] pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 
 	let path = directory.join(FILE_NAME);
 

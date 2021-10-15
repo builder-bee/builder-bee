@@ -3,7 +3,7 @@ use crate::cmd::runjar;
 use anyhow::Result;
 use crate::jar;
 use crate::subcommands::build;
-use colored::*;
+use colored::Colorize;
 use std::time::Instant;
 use std::path::Path;
 

@@ -4,7 +4,7 @@ use anyhow::Result;
 use anyhow::anyhow;
 use thiserror::Error;
 use crate::jar::compile;
-use colored::*;
+use colored::Colorize;
 use spinners::{Spinner, Spinners};
 use std::fs;
 use std::path::Path;

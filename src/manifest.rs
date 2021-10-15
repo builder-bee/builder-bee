@@ -1,5 +1,6 @@
 use crate::config::bbee_reader::BBeeConfig;
 
+#[must_use]
 pub fn generate(config: &BBeeConfig) -> String {
 	format!(
 		r#"Manifest-Version: 1.0
