@@ -1,5 +1,5 @@
 use super::run::run;
-use anyhow::{anyhow,Result,Context};
+use anyhow::{Result};
 use thiserror::Error;
 use std::path::Path;
 use std::process::Command;
@@ -34,8 +34,8 @@ pub fn compile(target: &Path, file: &Path) -> Result<(), JavaCompileError> {
 	if command_output.status.success() {
 		Ok(())
 	} else {
-		Err(anyhow!(JavaCompileError::Failed {
+		Err(JavaCompileError::Failed {
 			output: command_output.stderr,
-		}))
+		})
 	}
 }
