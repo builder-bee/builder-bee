@@ -1,2 +1,2 @@
-pub mod error;
 pub mod bbee_reader;
+pub mod error;

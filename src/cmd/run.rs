@@ -1,7 +1,7 @@
+use anyhow::Result;
 use std::process::Command;
 use std::process::ExitStatus;
 use std::str;
-use anyhow::Result;
 
 pub struct CommandOutput {
 	pub status: ExitStatus,

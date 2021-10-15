@@ -1,7 +1,7 @@
 use crate::config::bbee_reader::BBeeConfig;
 use crate::jar;
 use crate::manifest;
-use anyhow::{Context,Result};
+use anyhow::{Context, Result};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -47,9 +47,13 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 		zip.start_file(entry_path, options)
 			.context("Could not create entry path")?;
 
-		zip.write_all(&*fs::read(ref_entry.path())?).with_context(||
-			format!("Could not write file {} to jar.", ref_entry.path().to_str().unwrap())
-		)?;
+		zip.write_all(&*fs::read(ref_entry.path())?)
+			.with_context(|| {
+				format!(
+					"Could not write file {} to jar.",
+					ref_entry.path().to_str().unwrap()
+				)
+			})?;
 	}
 
 	// TODO make sure that the main class is present before writing this.
@@ -59,10 +63,12 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 
 	zip.write_all(manifest::generate(config).as_bytes())?;
 
-	zip.finish()
-		.with_context(|| format!(
-			"Could not finish writing jar file in {}", working_directory.to_str().unwrap()
-		))?;
+	zip.finish().with_context(|| {
+		format!(
+			"Could not finish writing jar file in {}",
+			working_directory.to_str().unwrap()
+		)
+	})?;
 
 	Ok(())
 }

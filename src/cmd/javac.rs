@@ -1,20 +1,15 @@
 use super::run::run;
-use anyhow::{Result};
-use thiserror::Error;
+use anyhow::Result;
 use std::path::Path;
 use std::process::Command;
+use thiserror::Error;
 
 #[derive(Error, Debug, Clone)]
 pub enum JavaCompileError {
 	#[error("Could not run javac, file: {file}, target: {target}")]
-	CanNotRun {
-		file: String,
-		target: String
-	},
+	CanNotRun { file: String, target: String },
 	#[error("Javac error: {output}")]
-	Failed {
-		output: String
-	}
+	Failed { output: String },
 }
 
 /// Compiles a `file` with javac and puts it at the `target` path.
@@ -26,10 +21,10 @@ pub fn compile(target: &Path, file: &Path) -> Result<(), JavaCompileError> {
 		.arg(file.display().to_string())
 		.arg("-d")
 		.arg(target.display().to_string()))
-		.map_err(|_| JavaCompileError::CanNotRun {
-			file: file.display().to_string(),
-			target: target.display().to_string()
-		})?;
+	.map_err(|_| JavaCompileError::CanNotRun {
+		file: file.display().to_string(),
+		target: target.display().to_string(),
+	})?;
 
 	if command_output.status.success() {
 		Ok(())

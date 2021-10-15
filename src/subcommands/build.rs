@@ -1,14 +1,14 @@
-use crate::config::bbee_reader;
 use crate::cmd::javac;
-use anyhow::Result;
-use anyhow::anyhow;
-use thiserror::Error;
+use crate::config::bbee_reader;
 use crate::jar::compile;
+use anyhow::anyhow;
+use anyhow::Result;
 use colored::Colorize;
 use spinners::{Spinner, Spinners};
 use std::fs;
 use std::path::Path;
 use std::time::Instant;
+use thiserror::Error;
 use walkdir::WalkDir;
 
 /// Represents an error that should be given if the config file is not found
@@ -16,7 +16,7 @@ use walkdir::WalkDir;
 #[error("\nAn error has occured while compiling class {class_file_name}.\n{compile_error_output}\nBuild {}.", "failed".red())]
 pub struct JavaBuildError {
 	pub class_file_name: String,
-	pub compile_error_output: String
+	pub compile_error_output: String,
 }
 
 pub fn build(working_directory: &Path) -> Result<()> {
@@ -32,7 +32,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 			config.toml_config.info.version.white()
 		),
 	);
-	
+
 	// Benchmark how long it takes to build the jar
 	let now = Instant::now();
 

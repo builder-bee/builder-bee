@@ -1,16 +1,16 @@
-use crate::config::bbee_reader;
 use crate::cmd::runjar;
-use anyhow::Result;
+use crate::config::bbee_reader;
 use crate::jar;
 use crate::subcommands::build;
+use anyhow::Result;
 use colored::Colorize;
-use std::time::Instant;
 use std::path::Path;
+use std::time::Instant;
 
 /// Runs the generated jar.
-/// 
+///
 /// # Errors
-/// 
+///
 pub fn run(working_directory: &Path) -> Result<()> {
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
@@ -19,7 +19,8 @@ pub fn run(working_directory: &Path) -> Result<()> {
 
 	let now = Instant::now();
 
-	let jar = &config.directory
+	let jar = &config
+		.directory
 		.join("build")
 		.join("libs")
 		.join(jar::name::generate(&config.toml_config));
@@ -28,13 +29,12 @@ pub fn run(working_directory: &Path) -> Result<()> {
 		Ok(log) => {
 			println!("{}", log);
 			true
-		},
+		}
 		Err(log) => {
-
 			println!("{}", log);
 
 			false
-		},
+		}
 	};
 
 	println!(

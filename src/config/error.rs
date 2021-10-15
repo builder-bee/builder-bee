@@ -4,5 +4,5 @@ use thiserror::Error;
 #[derive(Debug, Clone, Error)]
 #[error("Can not find bbee.toml in {project_directory_name}")]
 pub struct ConfigNotFoundError {
-	pub project_directory_name: String
+	pub project_directory_name: String,
 }

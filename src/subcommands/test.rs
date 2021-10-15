@@ -1,8 +1,8 @@
 use crate::config::bbee_reader;
-use anyhow::Result;
-use std::path::Path;
-use std::option::Option;
 use anyhow::anyhow;
+use anyhow::Result;
+use std::option::Option;
+use std::path::Path;
 
 pub fn test(working_directory: &Path) -> Result<()> {
 	if bbee_reader::find_config(working_directory) == Option::None {

@@ -4,11 +4,11 @@
 //! The main entry point for the bbee command-line tool.
 
 mod cmd;
+mod config;
 mod jar;
 mod manifest;
 mod subcommands;
-mod config;
-use anyhow::{Context,Result};
+use anyhow::{Context, Result};
 
 use std::env;
 use structopt::StructOpt;
@@ -40,9 +40,9 @@ fn main() {
 }
 
 fn main_err() -> Result<()> {
-	let current_path_buf = env::current_dir()
-		.context("Can not access current working directory!")?;
-	
+	let current_path_buf =
+		env::current_dir().context("Can not access current working directory!")?;
+
 	let current_path = current_path_buf.as_path();
 
 	match BeeCLI::from_args() {
