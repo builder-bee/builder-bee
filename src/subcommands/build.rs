@@ -59,7 +59,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 
 				return Err(anyhow!(JavaBuildError {
 					class_file_name: ref_entry.path().display().to_string(),
-					compile_error_output: error.output
+					compile_error_output: error.to_string()
 				}));
 			}
 		};
