@@ -10,9 +10,9 @@ mod manifest;
 mod subcommands;
 use anyhow::{Context, Result};
 
+use colored::Colorize;
 use std::env;
 use structopt::StructOpt;
-use colored::Colorize;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
