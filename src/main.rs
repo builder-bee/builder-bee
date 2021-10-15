@@ -12,6 +12,7 @@ use anyhow::{Context, Result};
 
 use std::env;
 use structopt::StructOpt;
+use colored::Colorize;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
@@ -34,7 +35,7 @@ fn main() {
 	match main_err() {
 		Ok(_) => (),
 		Err(error) => {
-			println!("error: {}", error);
+			println!("{}: {}", "error".red().bold(), error);
 		}
 	};
 }
