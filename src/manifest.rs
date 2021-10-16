@@ -6,6 +6,6 @@ pub fn generate(config: &BBeeConfig) -> String {
 		r#"Manifest-Version: 1.0
 Main-Class: {}
 Multi-Release: true"#,
-		config.info.main.as_ref().unwrap_or(&"Main".to_string())
+		config.info.main
 	)
 }
