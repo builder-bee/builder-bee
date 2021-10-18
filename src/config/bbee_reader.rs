@@ -31,7 +31,7 @@ impl Display for BBeeConfigDependency {
 #[derive(Debug)]
 pub struct BBeeConfigInfo {
 	pub name: String,
-	pub main: Option<String>,
+	pub main: String,
 	pub version: String,
 }
 
@@ -134,11 +134,7 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 				.to_string(),
 
 			// Get optional main class.
-			main: if info.get("main").is_some() {
-				Some(info.get("main").unwrap().as_str().unwrap().to_string())
-			} else {
-				None
-			},
+			main: info.get("main").unwrap_or(&Value::String("1.0.0".to_string())).as_str().unwrap().to_string(),
 
 			// Get semi-mandatory version number (defaults to 1.0.0)
 			version: info
