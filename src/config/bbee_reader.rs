@@ -138,7 +138,7 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 				.get("main")
 				.unwrap_or(&Value::String("1.0.0".to_string()))
 				.as_str()
-				.ok_or_else( ||anyhow!("[info] main is not a string"))?
+				.ok_or_else(|| anyhow!("[info] main is not a string"))?
 				.to_string(),
 
 			// Get semi-mandatory version number (defaults to 1.0.0)
