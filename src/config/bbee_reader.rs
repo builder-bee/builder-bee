@@ -120,14 +120,18 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 }
 
 /// Get a `BBeeConfig` from a toml Value
-fn config_from_value(value: &Value) -> BBeeConfig {
+fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 	let info = value.get("info").unwrap(); // Should always be in a bbee config.
 	let dependencies = value.get("dependencies");
 
-	return BBeeConfig {
+	return Ok(BBeeConfig {
 		info: BBeeConfigInfo {
 			// Unwrap manditory Name
-			name: info.get("name").unwrap().as_str().unwrap().to_string(),
+			name: info.get("name")
+				.ok_or(anyhow!("Name not found"))?
+				.as_str()
+				.ok_or(anyhow!("Name is not string!"))?
+				.to_string(),
 
 			// Get optional main class.
 			main: if info.get("main").is_some() {
@@ -146,7 +150,7 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 		},
 
 		dependencies: if let Some(value) = dependencies {
-			let unwrapped_dependencies = value.as_table().unwrap();
+			let unwrapped_dependencies = value.as_table().ok_or("Dependency is not a table!")?;
 
 			let mut vector: Vec<BBeeConfigDependency> =
 				Vec::with_capacity(unwrapped_dependencies.len());
@@ -158,14 +162,16 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 					name: key.to_string(),
 
 					// Get the version from the table inside
-					version: value.get("version").unwrap().as_str().unwrap().to_string(),
+					version: value.get("version")
+						.ok_or(anyhow!("Version not found"))?.as_str()
+						.ok_or(anyhow!("Version is not a string"))?.to_string(),
 
 					// Shade's default is None
 					shade: value
 						.get("shade")
 						.unwrap_or(&Value::String("none".to_string()))
 						.as_str()
-						.unwrap()
+						.ok_or("Shade value is not a string")?
 						.to_string(),
 				});
 			}
@@ -174,5 +180,5 @@ fn config_from_value(value: &Value) -> BBeeConfig {
 		} else {
 			vec![]
 		},
-	};
+	});
 }
