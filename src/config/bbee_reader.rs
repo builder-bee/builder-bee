@@ -166,9 +166,9 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 						// Get the version from the table inside
 						version: value
 							.get("version")
-							.ok_or(anyhow!("Version not found"))?
+							.ok_or_else(|| anyhow!("Version not found"))?
 							.as_str()
-							.ok_or(anyhow!("Version is not a string"))?
+							.ok_or_else(|| anyhow!("Version is not a string"))?
 							.to_string(),
 
 						// Shade's default is None
@@ -176,7 +176,7 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 							.get("shade")
 							.unwrap_or(&Value::String("none".to_string()))
 							.as_str()
-							.ok_or(anyhow!("Shade value is not a string"))?
+							.ok_or_else(|| anyhow!("Shade value is not a string"))?
 							.to_string(),
 					})
 				})
