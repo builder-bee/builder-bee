@@ -120,7 +120,7 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 	let info = value
 		.get("info")
-		.ok_or(anyhow!("Could not find info table"))?; // Should always be in a bbee config.
+		.ok_or_else(|| anyhow!("Could not find info table"))?; // Should always be in a bbee config.
 	let dependencies = value.get("dependencies");
 
 	return Ok(BBeeConfig {
@@ -128,9 +128,9 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 			// Unwrap manditory Name
 			name: info
 				.get("name")
-				.ok_or(anyhow!("Name not found"))?
+				.ok_or_else(|| anyhow!("Name not found"))?
 				.as_str()
-				.ok_or(anyhow!("Name is not string!"))?
+				.ok_or_else(|| anyhow!("Name is not string!"))?
 				.to_string(),
 
 			// Get optional main class.
@@ -138,7 +138,7 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 				.get("main")
 				.unwrap_or(&Value::String("1.0.0".to_string()))
 				.as_str()
-				.ok_or(anyhow!("[info] main is not a string"))?
+				.ok_or_else( ||anyhow!("[info] main is not a string"))?
 				.to_string(),
 
 			// Get semi-mandatory version number (defaults to 1.0.0)
@@ -153,7 +153,7 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 		dependencies: if let Some(value) = dependencies {
 			let unwrapped_dependencies = value
 				.as_table()
-				.ok_or(anyhow!("Dependency is not a table!"))?;
+				.ok_or_else(|| anyhow!("Dependency is not a table!"))?;
 
 			// EX "com.google.code.gson:gson" = { version = "2.8.7", shade = "all" }
 			unwrapped_dependencies
