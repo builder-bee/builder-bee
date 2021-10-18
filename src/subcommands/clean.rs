@@ -1,5 +1,5 @@
 use crate::config::bbee_reader;
-use anyhow::{Context, Result, anyhow};
+use anyhow::{Context, Result};
 use std::fs;
 use std::path::Path;
 
@@ -10,11 +10,7 @@ pub fn clean(working_directory: &Path) -> Result<()> {
 	fs::remove_dir_all(config.directory.join("build")).with_context(|| {
 		format!(
 			"Could not remove directory build in {}",
-			config
-				.directory
-				.join("build")
-				.to_str()
-				.unwrap_or("unknown")
+			config.directory.join("build").to_str().unwrap_or("unknown")
 		)
 	})?;
 

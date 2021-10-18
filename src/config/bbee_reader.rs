@@ -76,10 +76,9 @@ pub fn read(config: &Path) -> Result<BBeeConfig> {
 	let config_toml = &fs::read_to_string(config)?.parse::<Value>()?;
 
 	// Generate the config object from the Value
-	let config = config_from_value(config_toml);
 
 	// Return the config!
-	config
+	config_from_value(config_toml)
 }
 
 #[must_use]
@@ -121,22 +120,28 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 
 /// Get a `BBeeConfig` from a toml Value
 fn config_from_value(value: &Value) -> Result<BBeeConfig> {
-	let info = value.get("info").ok_or(anyhow!("Could not find info table"))?; // Should always be in a bbee config.
+	let info = value
+		.get("info")
+		.ok_or(anyhow!("Could not find info table"))?; // Should always be in a bbee config.
 	let dependencies = value.get("dependencies");
 
 	return Ok(BBeeConfig {
 		info: BBeeConfigInfo {
 			// Unwrap manditory Name
-			name: info.get("name")
+			name: info
+				.get("name")
 				.ok_or(anyhow!("Name not found"))?
 				.as_str()
 				.ok_or(anyhow!("Name is not string!"))?
 				.to_string(),
 
 			// Get optional main class.
-			main: info.get("main")
+			main: info
+				.get("main")
 				.unwrap_or(&Value::String("1.0.0".to_string()))
-				.as_str().ok_or(anyhow!("[info] main is not a string"))?.to_string(),
+				.as_str()
+				.ok_or(anyhow!("[info] main is not a string"))?
+				.to_string(),
 
 			// Get semi-mandatory version number (defaults to 1.0.0)
 			version: info
@@ -148,28 +153,35 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 		},
 
 		dependencies: if let Some(value) = dependencies {
-			let unwrapped_dependencies = value.as_table().ok_or(anyhow!("Dependency is not a table!"))?;
+			let unwrapped_dependencies = value
+				.as_table()
+				.ok_or(anyhow!("Dependency is not a table!"))?;
 
 			// EX "com.google.code.gson:gson" = { version = "2.8.7", shade = "all" }
-			unwrapped_dependencies.into_iter().map(|(key, value)| -> Result<BBeeConfigDependency> {
-				Ok(BBeeConfigDependency {
-					// Get the name from the key
-					name: key.to_string(),
+			unwrapped_dependencies
+				.iter()
+				.map(|(key, value)| -> Result<BBeeConfigDependency> {
+					Ok(BBeeConfigDependency {
+						// Get the name from the key
+						name: key.to_string(),
 
-					// Get the version from the table inside
-					version: value.get("version")
-						.ok_or(anyhow!("Version not found"))?.as_str()
-						.ok_or(anyhow!("Version is not a string"))?.to_string(),
+						// Get the version from the table inside
+						version: value
+							.get("version")
+							.ok_or(anyhow!("Version not found"))?
+							.as_str()
+							.ok_or(anyhow!("Version is not a string"))?
+							.to_string(),
 
-					// Shade's default is None
-					shade: value
-						.get("shade")
-						.unwrap_or(&Value::String("none".to_string()))
-						.as_str()
-						.ok_or(anyhow!("Shade value is not a string"))?
-						.to_string(),
-				}
-			)})
+						// Shade's default is None
+						shade: value
+							.get("shade")
+							.unwrap_or(&Value::String("none".to_string()))
+							.as_str()
+							.ok_or(anyhow!("Shade value is not a string"))?
+							.to_string(),
+					})
+				})
 				.take_while(Result::is_ok)
 				.map(Result::unwrap)
 				.collect()
