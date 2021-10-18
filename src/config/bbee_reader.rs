@@ -79,7 +79,7 @@ pub fn read(config: &Path) -> Result<BBeeConfig> {
 	let config = config_from_value(config_toml);
 
 	// Return the config!
-	Ok(config)
+	config
 }
 
 #[must_use]
@@ -146,14 +146,11 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 		},
 
 		dependencies: if let Some(value) = dependencies {
-			let unwrapped_dependencies = value.as_table().ok_or("Dependency is not a table!")?;
-
-			let mut vector: Vec<BBeeConfigDependency> =
-				Vec::with_capacity(unwrapped_dependencies.len());
+			let unwrapped_dependencies = value.as_table().ok_or(anyhow!("Dependency is not a table!"))?;
 
 			// EX "com.google.code.gson:gson" = { version = "2.8.7", shade = "all" }
-			for (key, value) in unwrapped_dependencies {
-				vector.push(BBeeConfigDependency {
+			unwrapped_dependencies.into_iter().map(|(key, value)| -> Result<BBeeConfigDependency> {
+				Ok(BBeeConfigDependency {
 					// Get the name from the key
 					name: key.to_string(),
 
@@ -167,12 +164,13 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 						.get("shade")
 						.unwrap_or(&Value::String("none".to_string()))
 						.as_str()
-						.ok_or("Shade value is not a string")?
+						.ok_or(anyhow!("Shade value is not a string"))?
 						.to_string(),
-				});
-			}
-
-			vector
+				}
+			)})
+				.take_while(Result::is_ok)
+				.map(Result::unwrap)
+				.collect()
 		} else {
 			vec![]
 		},
