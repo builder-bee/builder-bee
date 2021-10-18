@@ -76,8 +76,6 @@ pub fn read(config: &Path) -> Result<BBeeConfig> {
 	let config_toml = &fs::read_to_string(config)?.parse::<Value>()?;
 
 	// Generate the config object from the Value
-
-	// Return the config!
 	config_from_value(config_toml)
 }
 
