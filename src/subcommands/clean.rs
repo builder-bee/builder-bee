@@ -1,5 +1,5 @@
 use crate::config::bbee_reader;
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, anyhow};
 use std::fs;
 use std::path::Path;
 
@@ -14,8 +14,7 @@ pub fn clean(working_directory: &Path) -> Result<()> {
 				.directory
 				.join("build")
 				.to_str()
-				.context("Could not remove directory build")
-				.unwrap()
+				.unwrap_or("unknown")
 		)
 	})?;
 

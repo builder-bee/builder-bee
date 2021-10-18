@@ -96,7 +96,7 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 			.with_context(|| {
 				format!(
 					"Could not find bbee.toml in {} or any of its parents",
-					current_directory.to_str().unwrap()
+					current_directory.to_str().unwrap_or("(unknown)")
 				)
 			})
 			.ok()?;
@@ -121,7 +121,7 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 
 /// Get a `BBeeConfig` from a toml Value
 fn config_from_value(value: &Value) -> Result<BBeeConfig> {
-	let info = value.get("info").unwrap(); // Should always be in a bbee config.
+	let info = value.get("info").ok_or(anyhow!("Could not find info table"))?; // Should always be in a bbee config.
 	let dependencies = value.get("dependencies");
 
 	return Ok(BBeeConfig {
@@ -134,7 +134,9 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 				.to_string(),
 
 			// Get optional main class.
-			main: info.get("main").unwrap_or(&Value::String("1.0.0".to_string())).as_str().unwrap().to_string(),
+			main: info.get("main")
+				.unwrap_or(&Value::String("1.0.0".to_string()))
+				.as_str().ok_or(anyhow!("[info] main is not a string"))?.to_string(),
 
 			// Get semi-mandatory version number (defaults to 1.0.0)
 			version: info
