@@ -22,7 +22,10 @@ pub enum JavaCompileError {
 	},
 }
 
-pub fn compile(config: &Config) -> Result<(), JavaCompileError> {
+pub fn compile(config: &Config) -> Result<i64, JavaCompileError> {
+
+	let mut amount: i64 = 0;
+
 	// Walk through all the current .java files
 	for entry in WalkDir::new(config.directory.join("main").join("src")) {
 		// Get a reference of the entry
@@ -48,7 +51,9 @@ pub fn compile(config: &Config) -> Result<(), JavaCompileError> {
 				});
 			}
 		};
+
+		amount = amount + 1;
 	}
 
-	Ok(())
+	Ok(amount)
 }
