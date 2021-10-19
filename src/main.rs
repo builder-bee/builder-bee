@@ -8,6 +8,7 @@ mod config;
 mod jar;
 mod manifest;
 mod subcommands;
+mod compilation;
 use anyhow::{Context, Result};
 
 use colored::Colorize;

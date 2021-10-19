@@ -1,15 +1,12 @@
-use crate::cmd::javac;
 use crate::config::bbee_reader;
 use crate::jar::compile;
-use anyhow::anyhow;
-use anyhow::Result;
+use crate::compilation::compile::{JavaCompileError, compile};
+use anyhow::{anyhow, Result};
 use colored::Colorize;
 use spinners::{Spinner, Spinners};
-use std::fs;
 use std::path::Path;
 use std::time::Instant;
 use thiserror::Error;
-use walkdir::WalkDir;
 
 /// Represents an error that should be given if the config file is not found
 #[derive(Debug, Clone, Error)]
@@ -36,35 +33,22 @@ pub fn build(working_directory: &Path) -> Result<()> {
 	// Benchmark how long it takes to build the jar
 	let now = Instant::now();
 
-	// Walk through all the currentl .java files
-	for entry in WalkDir::new(config.directory.join("main").join("src")) {
-		// Get a reference of the entry
-		let ref_entry = &entry?;
+	// Run the compilation
+	match compile(&config) {
+		Ok(_) => (),
+		Err(err) => {
+			spinner.stop();
 
-		// Ignore directories
-		if ref_entry.file_type().is_dir() {
-			continue;
-		}
+			match err {
+				JavaCompileError::Entry(err) => return Err(anyhow!(err)),
+				JavaCompileError::IO(err) => return Err(anyhow!(err)),
 
-		fs::create_dir_all(&config.directory.join("build").join("classes").as_path())?;
-
-		// Compile it with the javac command line.
-		match javac::compile(
-			config.directory.join("build").join("classes").as_path(),
-			ref_entry.path(),
-		) {
-			Ok(_) => true,
-			Err(error) => {
-				spinner.stop();
-
-				return Err(anyhow!(JavaBuildError {
-					class_file_name: ref_entry.path().display().to_string(),
-					compile_error_output: error.to_string()
-				}));
+				JavaCompileError::BadCommandCall { class_file_name, compile_error_output } 
+					=> return Err(anyhow!(JavaBuildError { class_file_name: class_file_name, compile_error_output: compile_error_output }))
 			}
-		};
-	}
-
+		}
+	};
+	
 	// Finally, compile the jar
 	compile::compile(&config.directory, &config.toml_config)?;
 

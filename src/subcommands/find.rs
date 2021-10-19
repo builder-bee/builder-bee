@@ -9,7 +9,7 @@ pub fn find(working_directory: &Path) -> Result<()> {
 			"Config: {}",
 			value
 				.to_str()
-				.unwrap_or("Could not print out config (not UTF-8?)")
+				.unwrap_or("(Could not print out config (not UTF-8?)")
 				.green()
 		),
 		None => println!("No config found."),

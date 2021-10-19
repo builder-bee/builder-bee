@@ -8,9 +8,6 @@ use std::path::Path;
 use std::time::Instant;
 
 /// Runs the generated jar.
-///
-/// # Errors
-///
 pub fn run(working_directory: &Path) -> Result<()> {
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
