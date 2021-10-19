@@ -8,14 +8,6 @@ use std::path::Path;
 use std::time::Instant;
 use thiserror::Error;
 
-/// Represents an error that should be given if the config file is not found
-#[derive(Debug, Clone, Error)]
-#[error("\nAn error has occured while compiling class {class_file_name}.\n{compile_error_output}\nBuild {}.", "failed".red())]
-pub struct JavaBuildError {
-	pub class_file_name: String,
-	pub compile_error_output: String,
-}
-
 pub fn build(working_directory: &Path) -> Result<()> {
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
@@ -47,7 +39,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 					class_file_name,
 					compile_error_output,
 				} => {
-					return Err(anyhow!(JavaBuildError {
+					return Err(anyhow!(JavaCompileError::BadCommandCall {
 						class_file_name,
 						compile_error_output
 					}))
