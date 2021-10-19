@@ -23,7 +23,6 @@ pub enum JavaCompileError {
 }
 
 pub fn compile(config: &Config) -> Result<i64, JavaCompileError> {
-
 	let mut amount: i64 = 0;
 
 	// Walk through all the current .java files
@@ -52,7 +51,7 @@ pub fn compile(config: &Config) -> Result<i64, JavaCompileError> {
 			}
 		};
 
-		amount = amount + 1;
+		amount += 1;
 	}
 
 	Ok(amount)

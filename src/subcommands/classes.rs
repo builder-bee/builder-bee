@@ -1,10 +1,10 @@
+use crate::compilation::compile::{compile, JavaCompileError};
+use crate::config::bbee_reader;
 use anyhow::{anyhow, Result};
-use std::path::Path;
 use colored::Colorize;
 use spinner::SpinnerBuilder;
+use std::path::Path;
 use std::time::Instant;
-use crate::config::bbee_reader;
-use crate::compilation::compile::{compile, JavaCompileError};
 
 pub fn classes(working_directory: &Path) -> Result<()> {
 	// Read the config file
@@ -15,7 +15,8 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		"Compiling {} -- v{}...",
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
-	)).start();
+	))
+	.start();
 
 	// Benchmark how long it takes to compile the jar
 	let now = Instant::now();

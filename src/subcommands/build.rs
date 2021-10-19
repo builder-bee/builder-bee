@@ -21,14 +21,15 @@ pub fn build(working_directory: &Path) -> Result<()> {
 		"Building {} -- v{}...",
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
-	)).start();
+	))
+	.start();
 
 	// Finally, compile the jar
 	compile::compile(&config.directory, &config.toml_config)?;
 
 	// Stop fancy spinner
 	spinner.close();
-	
+
 	println!(
 		"\r\nBuild {}! (Took {} seconds).",
 		"successful".green(),
