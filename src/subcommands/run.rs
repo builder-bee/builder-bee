@@ -6,9 +6,14 @@ use anyhow::Result;
 use colored::Colorize;
 use std::path::Path;
 use std::time::Instant;
+use console::Term;
 
 /// Runs the generated jar.
 pub fn run(working_directory: &Path) -> Result<()> {
+
+	// Access this stdout
+	let term = Term::stdout();
+
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
 
@@ -33,6 +38,8 @@ pub fn run(working_directory: &Path) -> Result<()> {
 			false
 		}
 	};
+
+	term.clear_line()?;
 
 	println!(
 		"Run {}! (Took {} seconds)",

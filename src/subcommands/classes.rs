@@ -5,8 +5,13 @@ use colored::Colorize;
 use spinner::SpinnerBuilder;
 use std::path::Path;
 use std::time::Instant;
+use console::Term;
 
 pub fn classes(working_directory: &Path) -> Result<()> {
+
+	// Access this stdout
+	let term = Term::stdout();
+
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
 
@@ -47,8 +52,10 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 
 	spinner.close();
 
+	term.clear_line()?;
+
 	println!(
-		"\r\r\nCompilation {}! {} file{} compiled. (Took {} seconds).",
+		"Compilation {}! {} file{} compiled. (Took {} seconds).",
 		"successful".green(),
 		amount.to_string().blue(),
 		if amount == 1 { "" } else { "s" },

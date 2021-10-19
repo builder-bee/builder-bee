@@ -7,7 +7,7 @@ use thiserror::Error;
 #[derive(Debug, Clone, Error)]
 pub enum JavaRunError {
 	#[error("No output was found")]
-	OutputNotFound,
+	OutputNotFound(String),
 	#[error("Javac error: {output}")]
 	CommandFailed { output: String },
 }
@@ -17,7 +17,7 @@ pub fn javarun(file: &Path) -> Result<String, JavaRunError> {
 	let command = run(Command::new("java")
 		.arg("-jar")
 		.arg(file.display().to_string()))
-	.map_err(|_| JavaRunError::OutputNotFound)?;
+	.map_err(|_| JavaRunError::OutputNotFound(file.display().to_string()))?;
 
 	if command.status.success() {
 		Ok({
