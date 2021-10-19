@@ -20,7 +20,11 @@ pub fn javarun(file: &Path) -> Result<String, JavaRunError> {
 	.map_err(|_| JavaRunError::OutputNotFound)?;
 
 	if command.status.success() {
-		Ok(command.stdout)
+		Ok({
+			let mut chars = command.stdout.chars();
+			chars.next_back();
+			chars.as_str().to_string()
+		})
 	} else {
 		Err(JavaRunError::CommandFailed {
 			output: command.stderr,
