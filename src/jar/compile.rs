@@ -33,19 +33,22 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 			continue;
 		}
 
-		let entry_path: String = ref_entry
-			.path()
-			.strip_prefix(&root_class_folder)?
-			.display()
-			.to_string();
+		// Create file and necessary directories
+		{
+			let entry_path: String = ref_entry
+				.path()
+				.strip_prefix(&root_class_folder)?
+				.display()
+				.to_string();
 
-		if ref_entry.file_type().is_dir() {
-			zip.add_directory(entry_path, options)?;
-			continue;
+			if ref_entry.file_type().is_dir() {
+				zip.add_directory(entry_path, options)?;
+				continue;
+			}
+
+			zip.start_file(entry_path, options)
+				.context("Could not create entry path")?;
 		}
-
-		zip.start_file(entry_path, options)
-			.context("Could not create entry path")?;
 
 		zip.write_all(&*fs::read(ref_entry.path())?)
 			.with_context(|| format!(

@@ -27,7 +27,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 	compile::compile(&config.directory, &config.toml_config)?;
 
 	// Stop fancy spinner
-	spinner.update("".into());
+	spinner.close();
 	
 	println!(
 		"\r\nBuild {}! (Took {} seconds).",

@@ -43,7 +43,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		}
 	};
 
-	spinner.update("".into());
+	spinner.close();
 
 	println!(
 		"\r\r\nCompilation {}! {} file{} compiled. (Took {} seconds).",
