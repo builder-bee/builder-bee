@@ -2,7 +2,7 @@ use crate::cmd::runjar;
 use crate::config::bbee_reader;
 use crate::jar;
 use crate::subcommands::build;
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::Colorize;
 use std::path::Path;
 use std::time::Instant;
@@ -27,15 +27,13 @@ pub fn run(working_directory: &Path) -> Result<()> {
 		.join("libs")
 		.join(jar::name::generate(&config.toml_config));
 
-	let success = match runjar::javarun(jar) {
+	match runjar::javarun(jar) {
 		Ok(log) => {
 			println!("{}", log);
-			true
 		}
 		Err(log) => {
-			println!("{}", log);
-
-			false
+			println!("Run {}. Error: {}", "failed".red(), log);
+			return Err(anyhow!(log))
 		}
 	};
 
@@ -43,11 +41,7 @@ pub fn run(working_directory: &Path) -> Result<()> {
 
 	println!(
 		"Run {}! (Took {} seconds)",
-		if success {
-			"successful".green()
-		} else {
-			"failed".red()
-		},
+		"successful".green(),
 		(now.elapsed().as_millis() as f64 / 1000.0)
 			.to_string()
 			.white()
