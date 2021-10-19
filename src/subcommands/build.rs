@@ -22,6 +22,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
 	))
+	.spinner((*crate::spinner::SPINNER_FORMAT).to_vec())
 	.start();
 
 	// Finally, compile the jar

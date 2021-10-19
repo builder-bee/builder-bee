@@ -8,6 +8,7 @@ mod compilation;
 mod config;
 mod jar;
 mod manifest;
+mod spinner;
 mod subcommands;
 use anyhow::{Context, Result};
 

@@ -16,6 +16,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
 	))
+	.spinner((*crate::spinner::SPINNER_FORMAT).to_vec())
 	.start();
 
 	// Benchmark how long it takes to compile the jar
