@@ -4,11 +4,11 @@
 //! The main entry point for the bbee command-line tool.
 
 mod cmd;
+mod compilation;
 mod config;
 mod jar;
 mod manifest;
 mod subcommands;
-mod compilation;
 use anyhow::{Context, Result};
 
 use colored::Colorize;

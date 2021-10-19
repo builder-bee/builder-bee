@@ -1,24 +1,25 @@
-use std::fs;
 use crate::cmd::javac;
-use walkdir::WalkDir;
-use anyhow::Result;
-use thiserror::Error;
 use crate::config::bbee_reader::Config;
+use anyhow::Result;
+use std::fs;
+use thiserror::Error;
+use walkdir::WalkDir;
 
 #[derive(Debug, Error)]
 pub enum JavaCompileError {
-
 	#[error(transparent)]
 	Entry(#[from] walkdir::Error),
 
 	#[error(transparent)]
 	IO(#[from] std::io::Error),
 
-	#[error("\nAn error has occured while compiling class {class_file_name}: {compile_error_output}")]
+	#[error(
+		"\nAn error has occured while compiling class {class_file_name}: {compile_error_output}"
+	)]
 	BadCommandCall {
 		class_file_name: String,
-		compile_error_output: String
-	}
+		compile_error_output: String,
+	},
 }
 
 pub fn compile(config: &Config) -> Result<(), JavaCompileError> {
@@ -43,7 +44,7 @@ pub fn compile(config: &Config) -> Result<(), JavaCompileError> {
 			Err(error) => {
 				return Err(JavaCompileError::BadCommandCall {
 					class_file_name: ref_entry.path().display().to_string(),
-					compile_error_output: error.to_string()
+					compile_error_output: error.to_string(),
 				});
 			}
 		};

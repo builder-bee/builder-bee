@@ -1,6 +1,6 @@
+use crate::compilation::compile::{compile, JavaCompileError};
 use crate::config::bbee_reader;
 use crate::jar::compile;
-use crate::compilation::compile::{JavaCompileError, compile};
 use anyhow::{anyhow, Result};
 use colored::Colorize;
 use spinners::{Spinner, Spinners};
@@ -43,12 +43,19 @@ pub fn build(working_directory: &Path) -> Result<()> {
 				JavaCompileError::Entry(err) => return Err(anyhow!(err)),
 				JavaCompileError::IO(err) => return Err(anyhow!(err)),
 
-				JavaCompileError::BadCommandCall { class_file_name, compile_error_output } 
-					=> return Err(anyhow!(JavaBuildError { class_file_name: class_file_name, compile_error_output: compile_error_output }))
+				JavaCompileError::BadCommandCall {
+					class_file_name,
+					compile_error_output,
+				} => {
+					return Err(anyhow!(JavaBuildError {
+						class_file_name,
+						compile_error_output
+					}))
+				}
 			}
 		}
 	};
-	
+
 	// Finally, compile the jar
 	compile::compile(&config.directory, &config.toml_config)?;
 
