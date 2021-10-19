@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Result};
 use std::path::Path;
 use colored::Colorize;
-use spinners::{Spinner, Spinners};
+use spinner::SpinnerBuilder;
 use std::time::Instant;
 use crate::config::bbee_reader;
 use crate::compilation::compile::{compile, JavaCompileError};
@@ -11,14 +11,11 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 	let config = bbee_reader::find_and_read(working_directory)?;
 
 	// Fancy class spinner
-	let spinner = Spinner::new(
-		Spinners::Line,
-		format!(
-			"Compiling {} -- v{}...",
-			config.toml_config.info.name.white(),
-			config.toml_config.info.version.white()
-		),
-	);
+	let spinner = SpinnerBuilder::new(format!(
+		"Compiling {} -- v{}...",
+		config.toml_config.info.name.white(),
+		config.toml_config.info.version.white()
+	)).start();
 
 	// Benchmark how long it takes to compile the jar
 	let now = Instant::now();
@@ -27,7 +24,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 	let amount = match compile(&config) {
 		Ok(value) => value,
 		Err(err) => {
-			spinner.stop();
+			spinner.update(format!("Build {}", "failed".red()));
 
 			match err {
 				JavaCompileError::Entry(err) => return Err(anyhow!(err)),
@@ -46,12 +43,10 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		}
 	};
 
-	spinner.stop();
-
-	print!("\r\r");
+	spinner.update("".into());
 
 	println!(
-		"\nCompilation {}! {} file{} compiled. (Took {} seconds)",
+		"\r\r\nCompilation {}! {} file{} compiled. (Took {} seconds).",
 		"successful".green(),
 		amount.to_string().blue(),
 		if amount == 1 { "" } else { "s" },

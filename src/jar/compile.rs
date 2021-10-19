@@ -48,12 +48,10 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 			.context("Could not create entry path")?;
 
 		zip.write_all(&*fs::read(ref_entry.path())?)
-			.with_context(|| {
-				format!(
-					"Could not write file {} to jar.",
-					ref_entry.path().to_str().unwrap_or("unknown")
-				)
-			})?;
+			.with_context(|| format!(
+				"Could not write file {} to jar.",
+				ref_entry.path().to_str().unwrap_or("unknown")
+			))?;
 	}
 
 	// TODO make sure that the main class is present before writing this.
@@ -63,12 +61,10 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 
 	zip.write_all(manifest::generate(config).as_bytes())?;
 
-	zip.finish().with_context(|| {
-		format!(
-			"Could not finish writing jar file in {}",
-			working_directory.to_str().unwrap_or("unknown")
-		)
-	})?;
+	zip.finish().with_context(|| format!(
+		"Could not finish writing jar file in {}",
+		working_directory.to_str().unwrap_or("unknown")
+	))?;
 
 	Ok(())
 }

@@ -2,7 +2,7 @@ use crate::config::bbee_reader;
 use crate::jar::compile;
 use anyhow::Result;
 use colored::Colorize;
-use spinners::{Spinner, Spinners};
+use spinner::SpinnerBuilder;
 use std::path::Path;
 use std::time::Instant;
 
@@ -17,25 +17,20 @@ pub fn build(working_directory: &Path) -> Result<()> {
 	let now = Instant::now();
 
 	// Fancy building spinner
-	let spinner = Spinner::new(
-		Spinners::Line,
-		format!(
-			"Building {} -- v{}...",
-			config.toml_config.info.name.white(),
-			config.toml_config.info.version.white()
-		),
-	);
+	let spinner = SpinnerBuilder::new(format!(
+		"Building {} -- v{}...",
+		config.toml_config.info.name.white(),
+		config.toml_config.info.version.white()
+	)).start();
 
 	// Finally, compile the jar
 	compile::compile(&config.directory, &config.toml_config)?;
 
 	// Stop fancy spinner
-	spinner.stop();
-
-	print!("\r");
-
+	spinner.update("".into());
+	
 	println!(
-		"\nBuild {}! (Took {} seconds)",
+		"\r\nBuild {}! (Took {} seconds).",
 		"successful".green(),
 		(now.elapsed().as_millis() as f64 / 1000.0)
 			.to_string()
