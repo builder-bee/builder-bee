@@ -10,6 +10,7 @@ mod jar;
 mod manifest;
 mod spinner;
 mod subcommands;
+use std::time::Instant;
 use anyhow::{Context, Result};
 
 use colored::Colorize;
@@ -52,21 +53,31 @@ fn main_err() -> Result<()> {
 
 	let current_path = current_path_buf.as_path();
 
+	let instant = Instant::now();
+
 	match BeeCLI::from_args() {
-		BeeCLI::Build => subcommands::build::build(current_path),
+		BeeCLI::Build => subcommands::build::build(current_path)?,
 
-		BeeCLI::Init => subcommands::init::init(current_path),
+		BeeCLI::Init => subcommands::init::init(current_path)?,
 
-		BeeCLI::Clean => subcommands::clean::clean(current_path),
+		BeeCLI::Clean => subcommands::clean::clean(current_path)?,
 
-		BeeCLI::Test => subcommands::test::test(current_path),
+		BeeCLI::Test => subcommands::test::test(current_path)?,
 
-		BeeCLI::Run => subcommands::run::run(current_path),
+		BeeCLI::Run => subcommands::run::run(current_path)?,
 
-		BeeCLI::Find => subcommands::find::find(current_path),
+		BeeCLI::Find => subcommands::find::find(current_path)?,
 
-		BeeCLI::Classes => subcommands::classes::classes(current_path),
-	}?;
+		BeeCLI::Classes => subcommands::classes::classes(current_path)?,
+	};
+
+	println!(
+		"All tasks {}. (Took {} seconds).",
+		"successful".green(),
+		(instant.elapsed().as_millis() as f64 / 1000.0)
+			.to_string()
+			.white()
+	);
 
 	Ok(())
 }
