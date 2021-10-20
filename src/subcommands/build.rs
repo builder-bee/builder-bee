@@ -2,13 +2,12 @@ use crate::config::bbee_reader;
 use crate::jar::compile;
 use anyhow::Result;
 use colored::Colorize;
+use console::Term;
 use spinner::SpinnerBuilder;
 use std::path::Path;
 use std::time::Instant;
-use console::Term;
 
 pub fn build(working_directory: &Path) -> Result<()> {
-
 	// Access this stdout
 	let term = Term::stdout();
 

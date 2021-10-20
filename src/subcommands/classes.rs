@@ -2,13 +2,12 @@ use crate::compilation::compile::{compile, JavaCompileError};
 use crate::config::bbee_reader;
 use anyhow::{anyhow, Result};
 use colored::Colorize;
+use console::Term;
 use spinner::SpinnerBuilder;
 use std::path::Path;
 use std::time::Instant;
-use console::Term;
 
 pub fn classes(working_directory: &Path) -> Result<()> {
-
 	// Access this stdout
 	let term = Term::stdout();
 

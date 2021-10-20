@@ -10,8 +10,8 @@ mod jar;
 mod manifest;
 mod spinner;
 mod subcommands;
-use std::time::Instant;
 use anyhow::{Context, Result};
+use std::time::Instant;
 
 use colored::Colorize;
 use std::env;

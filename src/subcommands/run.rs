@@ -4,13 +4,12 @@ use crate::jar;
 use crate::subcommands::build;
 use anyhow::{anyhow, Result};
 use colored::Colorize;
+use console::Term;
 use std::path::Path;
 use std::time::Instant;
-use console::Term;
 
 /// Runs the generated jar.
 pub fn run(working_directory: &Path) -> Result<()> {
-
 	// Access this stdout
 	let term = Term::stdout();
 
@@ -33,7 +32,7 @@ pub fn run(working_directory: &Path) -> Result<()> {
 		}
 		Err(log) => {
 			println!("Run {}. Error: {}", "failed".red(), log);
-			return Err(anyhow!(log))
+			return Err(anyhow!(log));
 		}
 	};
 
