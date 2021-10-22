@@ -10,7 +10,9 @@ pub struct CommandOutput {
 }
 
 pub fn run(command: &mut Command) -> Result<CommandOutput> {
-	let output = command.output()?;
+	let child = command.spawn()?;
+
+	let output = child.wait_with_output()?;
 
 	Ok(CommandOutput {
 		status: output.status,

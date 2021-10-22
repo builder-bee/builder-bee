@@ -1,5 +1,5 @@
 use crate::config::bbee_reader;
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::Colorize;
 use std::path::Path;
 
@@ -9,7 +9,7 @@ pub fn find(working_directory: &Path) -> Result<()> {
 			"Config: {}",
 			value
 				.to_str()
-				.unwrap_or("(Could not print out config (not UTF-8?)")
+				.ok_or(anyhow!("(Could not print out config (not UTF-8?)"))?
 				.green()
 		),
 		None => println!("No config found."),
