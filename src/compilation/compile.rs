@@ -14,7 +14,7 @@ pub enum JavaCompileError {
 	IO(#[from] std::io::Error),
 
 	#[error(
-		"\nAn error has occured while compiling class {class_file_name}: {compile_error_output}"
+		"An error has occured while compiling class {class_file_name}: {compile_error_output}"
 	)]
 	BadCommandCall {
 		class_file_name: String,
