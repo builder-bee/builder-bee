@@ -24,9 +24,7 @@ pub fn clean(working_directory: &Path) -> Result<(), CleanError> {
 	fs::remove_dir_all(
 		directory
 			.parent()
-			.ok_or_else(|| CleanError::CouldNotGetParentOfFile(
-				directory.display().to_string(),
-			))?
+			.ok_or_else(|| CleanError::CouldNotGetParentOfFile(directory.display().to_string()))?
 			.join("build"),
 	)
 	.map_err(|e| {
