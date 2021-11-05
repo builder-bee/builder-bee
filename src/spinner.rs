@@ -1,7 +1,10 @@
 //! Spinner format for Builder Bee
+pub static SPINNER_FORMAT: &'static [&str] = &["-", "\\", "|", "/"];
 
-use lazy_static::lazy_static;
-
-lazy_static! {
-	pub static ref SPINNER_FORMAT: [&'static str; 4] = ["-", "\\", "|", "/"];
+/// Return bbee's spinner format.
+#[macro_export]
+macro_rules! bbee_spinner {
+	() => {
+		(*crate::spinner::SPINNER_FORMAT).to_vec()
+	};
 }
