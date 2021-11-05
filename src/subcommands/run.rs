@@ -49,8 +49,8 @@ pub fn run_project(working_directory: &Path) -> Result<()> {
 	Ok(())
 }
 
-pub fn run_file(file: &Path) -> Result<()> {
+// pub fn run_file(file: &Path) -> Result<()> {
 
-	Ok(())
+// 	Ok(())
 
-}
+// }

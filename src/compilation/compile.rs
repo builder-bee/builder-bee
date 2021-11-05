@@ -1,12 +1,14 @@
 use crate::cmd::javac;
+use crate::cmd::kotlinc;
 use crate::config::bbee_reader::Config;
 use anyhow::Result;
 use std::fs;
 use thiserror::Error;
+use std::ffi::OsStr;
 use walkdir::WalkDir;
 
 #[derive(Debug, Error)]
-pub enum JavaCompileError {
+pub enum CompileError {
 	#[error(transparent)]
 	Entry(#[from] walkdir::Error),
 
@@ -20,9 +22,13 @@ pub enum JavaCompileError {
 		class_file_name: String,
 		compile_error_output: String,
 	},
+	#[error("Could not get extension for file {file_name}")]
+	CouldNotGetExtension {
+		file_name: String
+	}
 }
 
-pub fn compile(config: &Config) -> Result<i64, JavaCompileError> {
+pub fn compile(config: &Config) -> Result<i64, CompileError> {
 	let mut amount: i64 = 0;
 
 	// Walk through all the current .java files
@@ -35,20 +41,40 @@ pub fn compile(config: &Config) -> Result<i64, JavaCompileError> {
 			continue;
 		}
 
-		fs::create_dir_all(&config.directory.join("build").join("classes").as_path())?;
+		let build_directory = &config.directory.join("build").join("classes");
 
-		// Compile it with the javac command line.
-		match javac::compile(
-			config.directory.join("build").join("classes").as_path(),
-			ref_entry.path(),
-		) {
-			Ok(_) => true,
-			Err(error) => {
-				return Err(JavaCompileError::BadCommandCall {
-					class_file_name: ref_entry.path().display().to_string(),
-					compile_error_output: error.to_string(),
-				});
+		fs::create_dir_all(&build_directory)?;
+
+		match ref_entry.path().extension().and_then(OsStr::to_str).ok_or_else(|| CompileError::CouldNotGetExtension {
+			file_name: ref_entry.path().display().to_string()
+		})? {
+			// Compile it with kotlinc.
+			"kt" => match kotlinc::compile(
+				build_directory,
+				ref_entry.path()
+			) {
+				Ok(_) => (),
+				Err(error) => {
+					return Err(CompileError::BadCommandCall {
+						class_file_name: ref_entry.path().display().to_string(),
+						compile_error_output: error.to_string(),
+					});
+				}
+			},
+			// Compile it with javac.
+			"java" => match javac::compile(
+				build_directory,
+				ref_entry.path(),
+			) {
+				Ok(_) => (),
+				Err(error) => {
+					return Err(CompileError::BadCommandCall {
+						class_file_name: ref_entry.path().display().to_string(),
+						compile_error_output: error.to_string(),
+					});
+				}
 			}
+			_ => ()
 		};
 
 		amount += 1;

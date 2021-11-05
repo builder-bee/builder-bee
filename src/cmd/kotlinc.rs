@@ -21,7 +21,7 @@ pub fn compile(target: &Path, file: &Path) -> Result<(), KotlinCompileError> {
 		.arg(file.display().to_string())
 		.arg("-d")
 		.arg(target.display().to_string()))
-	.map_err(|_| JavaCompileError::CanNotRun {
+	.map_err(|_| KotlinCompileError::CanNotRun {
 		file: file.display().to_string(),
 		target: target.display().to_string(),
 	})?;
@@ -29,7 +29,7 @@ pub fn compile(target: &Path, file: &Path) -> Result<(), KotlinCompileError> {
 	if command_output.status.success() {
 		Ok(())
 	} else {
-		Err(JavaCompileError::Failed {
+		Err(KotlinCompileError::Failed {
 			output: command_output.stderr,
 		})
 	}

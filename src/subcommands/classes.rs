@@ -1,4 +1,4 @@
-use crate::compilation::compile::{compile, JavaCompileError};
+use crate::compilation::compile::{compile, CompileError};
 use crate::config::bbee_reader;
 use anyhow::{anyhow, Result};
 use colored::Colorize;
@@ -33,18 +33,17 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 			spinner.update(format!("Build {}", "failed".red()));
 
 			match err {
-				JavaCompileError::Entry(err) => return Err(anyhow!(err)),
-				JavaCompileError::IO(err) => return Err(anyhow!(err)),
-
-				JavaCompileError::BadCommandCall {
+				CompileError::BadCommandCall {
 					class_file_name,
 					compile_error_output,
 				} => {
-					return Err(anyhow!(JavaCompileError::BadCommandCall {
+					return Err(anyhow!(CompileError::BadCommandCall {
 						class_file_name,
 						compile_error_output
 					}))
 				}
+
+				_ => return Err(anyhow!(err))
 			}
 		}
 	};
