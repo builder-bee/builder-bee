@@ -1,5 +1,5 @@
-use thiserror::Error;
 use colored::Colorize;
+use thiserror::Error;
 
 /// Represents an error that should be given if the config file is not found
 #[derive(Debug, Clone, Error)]

@@ -31,20 +31,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		Ok(value) => value,
 		Err(err) => {
 			spinner.update(format!("Build {}", "failed".red()));
-
-			match err {
-				CompileError::BadCommandCall {
-					class_file_name,
-					compile_error_output,
-				} => {
-					return Err(anyhow!(CompileError::BadCommandCall {
-						class_file_name,
-						compile_error_output
-					}))
-				}
-
-				_ => return Err(anyhow!(err))
-			}
+			return Err(anyhow!(err));
 		}
 	};
 
