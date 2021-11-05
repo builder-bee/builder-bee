@@ -7,8 +7,8 @@ use thiserror::Error;
 /// An error that occurs when running the clean subcommand
 #[derive(Error, Debug)]
 pub enum CleanError {
-	#[error("No config found")]
-	NoConfigFound,
+	#[error("No config found in directory {0}")]
+	NoConfigFound(String),
 
 	#[error("Could not remove directory build in {0}: {1}")]
 	CouldNotRemoveDirectory(String, std::io::Error),
@@ -19,7 +19,8 @@ pub enum CleanError {
 
 /// Remove the build directory from the `working_directory`
 pub fn clean(working_directory: &Path) -> Result<(), CleanError> {
-	let directory = bbee_reader::find_config(working_directory).ok_or(CleanError::NoConfigFound)?;
+	let directory = bbee_reader::find_config(working_directory)
+		.ok_or_else(|| CleanError::NoConfigFound(working_directory.display().to_string()))?;
 
 	fs::remove_dir_all(
 		directory
