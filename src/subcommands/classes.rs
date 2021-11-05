@@ -30,7 +30,8 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 	let amount = match compile(&config) {
 		Ok(value) => value,
 		Err(err) => {
-			spinner.update(format!("Build {}", "failed".red()));
+			spinner.close();
+			println!();
 			return Err(anyhow!(err));
 		}
 	};

@@ -4,10 +4,10 @@ use std::path::Path;
 use std::process::Command;
 use thiserror::Error;
 
-#[derive(Error, Debug, Clone)]
+#[derive(Error, Debug)]
 pub enum KotlinCompileError {
-	#[error("Could not run kotlinc, file: {file}, target: {target}")]
-	CanNotRun { file: String, target: String },
+	#[error("Could not run kotlinc, file: {file}, target: {target}, error: {error}")]
+	CanNotRun { file: String, target: String, error: anyhow::Error },
 	#[error("kotlinc error: {output}")]
 	Failed { output: String },
 }
@@ -21,9 +21,10 @@ pub fn compile(target: &Path, file: &Path) -> Result<(), KotlinCompileError> {
 		.arg(file.display().to_string())
 		.arg("-d")
 		.arg(target.display().to_string()))
-	.map_err(|_| KotlinCompileError::CanNotRun {
+	.map_err(|e| KotlinCompileError::CanNotRun {
 		file: file.display().to_string(),
 		target: target.display().to_string(),
+		error: e
 	})?;
 
 	if command_output.status.success() {
