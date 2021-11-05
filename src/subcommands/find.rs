@@ -9,7 +9,7 @@ pub fn find(working_directory: &Path) -> Result<()> {
 			"Config: {}",
 			value.display().to_string().green()
 		),
-		None => println!("No config found."),
+		None => println!("No config found. Use {} to create one", "bbee init".yellow()),
 	};
 
 	Ok(())
