@@ -1,5 +1,5 @@
 use crate::config::bbee_reader;
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 use colored::Colorize;
 use std::path::Path;
 
