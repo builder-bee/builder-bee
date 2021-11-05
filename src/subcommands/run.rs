@@ -9,7 +9,7 @@ use std::path::Path;
 use std::time::Instant;
 
 /// Runs the generated jar.
-pub fn run(working_directory: &Path) -> Result<()> {
+pub fn run_project(working_directory: &Path) -> Result<()> {
 	// Access this stdout
 	let term = Term::stdout();
 
@@ -47,4 +47,10 @@ pub fn run(working_directory: &Path) -> Result<()> {
 	);
 
 	Ok(())
+}
+
+pub fn run_file(file: &Path) -> Result<()> {
+
+	Ok(())
+
 }
