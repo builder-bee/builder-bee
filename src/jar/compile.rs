@@ -1,6 +1,6 @@
 use crate::config::bbee_reader::BBeeConfig;
 use crate::jar;
-use crate::manifest::{generate,MANIFEST_FOLDER_NAME,MANIFEST_FILE_NAME};
+use crate::manifest::{generate, MANIFEST_FILE_NAME, MANIFEST_FOLDER_NAME};
 use anyhow::{Context, Result};
 use std::fs;
 use std::fs::File;

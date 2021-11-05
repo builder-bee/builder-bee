@@ -51,11 +51,12 @@ pub struct Config {
 /// Reads the bbee file and outputs a conf gstruct
 pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 	let config = match find_config(working_directory) {
-		Option::None => return Err(anyhow!(ConfigNotFoundError {
-			project_directory_name: working_directory
-				.display().to_string()
-		})),
-		Option::Some(v) => v
+		Option::None => {
+			return Err(anyhow!(ConfigNotFoundError {
+				project_directory_name: working_directory.display().to_string()
+			}))
+		}
+		Option::Some(v) => v,
 	};
 
 	return Ok(Config {

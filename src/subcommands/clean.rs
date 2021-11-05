@@ -14,7 +14,7 @@ pub enum CleanError {
 	CouldNotRemoveDirectory(String, std::io::Error),
 
 	#[error("Could not get parent of file {0}.")]
-	CouldNotGetParentOfFile(String)
+	CouldNotGetParentOfFile(String),
 }
 
 /// Remove the build directory from the `working_directory`
@@ -22,13 +22,15 @@ pub fn clean(working_directory: &Path) -> Result<(), CleanError> {
 	let directory = bbee_reader::find_config(working_directory).ok_or(CleanError::NoConfigFound)?;
 
 	fs::remove_dir_all(
-		directory.parent()
-			.ok_or(CleanError::CouldNotGetParentOfFile(directory.display().to_string()))?.join("build")
-	).map_err(|e| {
-		CleanError::CouldNotRemoveDirectory(
-			directory.join("build").display().to_string(),
-			e,
-		)
+		directory
+			.parent()
+			.ok_or_else(|| CleanError::CouldNotGetParentOfFile(
+				directory.display().to_string(),
+			))?
+			.join("build"),
+	)
+	.map_err(|e| {
+		CleanError::CouldNotRemoveDirectory(directory.join("build").display().to_string(), e)
 	})?;
 
 	Ok(())
