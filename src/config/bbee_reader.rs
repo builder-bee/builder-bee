@@ -7,7 +7,8 @@ use std::option::Option;
 use std::path::{Path, PathBuf};
 use toml::Value;
 
-static FILE_NAME: &str = "bbee.toml";
+/// Config name for bbee -- bbee.toml
+const FILE_NAME: &str = "bbee.toml";
 
 /// Represents a dependency inside BBEE
 #[derive(PartialEq, Eq, Clone, Debug)]
