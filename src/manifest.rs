@@ -1,3 +1,5 @@
+//! Manifest utils for generating a MANIFEST.MF config
+
 use crate::config::bbee_reader::BBeeConfig;
 
 pub const MANIFEST_FILE_NAME: &str = "META-INF/MANIFEST.MF";

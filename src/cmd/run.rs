@@ -9,6 +9,7 @@ pub struct CommandOutput {
 	pub stderr: String,
 }
 
+/// Runs a command, spawning the command and waiting for output.
 pub fn run(command: &mut Command) -> Result<CommandOutput> {
 	let child = command.spawn()?;
 

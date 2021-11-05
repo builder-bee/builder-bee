@@ -30,7 +30,7 @@ enum BeeCLI {
 	Test,
 	/// Runs the built jar in the code
 	Run,
-	/// Finds the nearest config
+	/// Finds the nearest config bbee.toml config
 	Find,
 	/// Compiles all the classes
 	Classes,

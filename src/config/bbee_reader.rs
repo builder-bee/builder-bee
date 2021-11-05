@@ -114,6 +114,7 @@ pub fn grab_in_directory(directory: &Path) -> Option<PathBuf> {
 }
 
 /// Get a `BBeeConfig` from a toml Value
+#[must_use]
 fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 	let info = value
 		.get("info")

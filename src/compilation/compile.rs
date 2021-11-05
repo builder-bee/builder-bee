@@ -26,6 +26,9 @@ pub enum CompileError {
 	CouldNotGetExtension { file_name: String },
 }
 
+/// Compiles a project based on the BBeeConfig, returning the amount of files compiled.
+/// 
+/// * `config` The config to base this project on
 pub fn compile(config: &Config) -> Result<i64, CompileError> {
 	let mut amount: i64 = 0;
 
