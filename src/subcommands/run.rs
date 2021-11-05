@@ -10,8 +10,6 @@ use std::time::Instant;
 
 /// Runs the generated jar.
 pub fn run_project(working_directory: &Path) -> Result<()> {
-	// Access this stdout
-	let term = Term::stdout();
 
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
@@ -36,7 +34,7 @@ pub fn run_project(working_directory: &Path) -> Result<()> {
 		}
 	};
 
-	term.clear_line()?;
+	Term::stdout().clear_line()?;
 
 	println!(
 		"Run {}! (Took {} seconds)",

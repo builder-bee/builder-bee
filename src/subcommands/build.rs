@@ -8,8 +8,6 @@ use std::path::Path;
 use std::time::Instant;
 
 pub fn build(working_directory: &Path) -> Result<()> {
-	// Access this stdout
-	let term = Term::stdout();
 
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
@@ -35,7 +33,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 	// Stop fancy spinner
 	spinner.close();
 
-	term.clear_line()?;
+	Term::stdout().clear_line()?;
 
 	println!(
 		"Build {}! (Took {} seconds).",
