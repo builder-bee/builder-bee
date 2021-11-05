@@ -1,4 +1,4 @@
-use crate::compilation::compile::{compile, CompileError};
+use crate::compilation::compile::compile;
 use crate::config::bbee_reader;
 use anyhow::{anyhow, Result};
 use colored::Colorize;

@@ -1,5 +1,5 @@
 //! Spinner format for Builder Bee
-pub static SPINNER_FORMAT: &'static [&str] = &["-", "\\", "|", "/"];
+pub static SPINNER_FORMAT: &[&str] = &["-", "\\", "|", "/"];
 
 /// Return bbee's spinner format.
 #[macro_export]
