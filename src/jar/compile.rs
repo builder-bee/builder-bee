@@ -54,7 +54,7 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 			.with_context(|| {
 				format!(
 					"Could not write file {} to jar.",
-					ref_entry.path().to_str().unwrap_or("unknown")
+					ref_entry.path().display().to_string()
 				)
 			})?;
 	}
@@ -69,7 +69,7 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 	zip.finish().with_context(|| {
 		format!(
 			"Could not finish writing jar file in {}",
-			working_directory.to_str().unwrap_or("unknown")
+			working_directory.display().to_string()
 		)
 	})?;
 

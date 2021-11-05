@@ -23,14 +23,10 @@ pub fn clean(working_directory: &Path) -> Result<(), CleanError> {
 
 	fs::remove_dir_all(
 		directory.parent()
-		.ok_or(CleanError::CouldNotGetParentOfFile(directory.display().to_string()))?.join("build")
+			.ok_or(CleanError::CouldNotGetParentOfFile(directory.display().to_string()))?.join("build")
 	).map_err(|e| {
 		CleanError::CouldNotRemoveDirectory(
-			directory
-				.join("build")
-				.to_str()
-				.unwrap_or("unknown")
-				.to_string(),
+			directory.join("build").display().to_string(),
 			e,
 		)
 	})?;

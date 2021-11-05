@@ -55,9 +55,7 @@ pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 	if config == Option::None {
 		return Err(anyhow!(ConfigNotFoundError {
 			project_directory_name: working_directory
-				.to_str()
-				.context("Could not get the working directory")?
-				.to_string()
+				.display().to_string()
 		}));
 	};
 
@@ -94,7 +92,7 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 			.with_context(|| {
 				format!(
 					"Could not find bbee.toml in {} or any of its parents",
-					current_directory.to_str().unwrap_or("(unknown)")
+					current_directory.display().to_string()
 				)
 			})
 			.ok()?;
