@@ -1,6 +1,6 @@
 use crate::config::bbee_reader::BBeeConfig;
 use crate::jar;
-use crate::manifest;
+use crate::manifest::{generate,MANIFEST_FOLDER_NAME,MANIFEST_FILE_NAME};
 use anyhow::{Context, Result};
 use std::fs;
 use std::fs::File;
@@ -60,11 +60,11 @@ pub fn compile(working_directory: &Path, config: &BBeeConfig) -> Result<()> {
 	}
 
 	// TODO make sure that the main class is present before writing this.
-	zip.add_directory("META-INF", options)?;
+	zip.add_directory(MANIFEST_FOLDER_NAME, options)?;
 
-	zip.start_file("META-INF/MANIFEST.MF", options)?;
+	zip.start_file(MANIFEST_FILE_NAME, options)?;
 
-	zip.write_all(manifest::generate(config).as_bytes())?;
+	zip.write_all(generate(config).as_bytes())?;
 
 	zip.finish().with_context(|| {
 		format!(

@@ -1,9 +1,8 @@
 use crate::config::bbee_reader;
-use anyhow::Result;
 use colored::Colorize;
 use std::path::Path;
 
-pub fn find(working_directory: &Path) -> Result<()> {
+pub fn find(working_directory: &Path) {
 	match bbee_reader::find_config(working_directory) {
 		Some(value) => println!(
 			"Config: {}",
@@ -11,6 +10,4 @@ pub fn find(working_directory: &Path) -> Result<()> {
 		),
 		None => println!("No config found. Use {} to create one", "bbee init".yellow()),
 	};
-
-	Ok(())
 }

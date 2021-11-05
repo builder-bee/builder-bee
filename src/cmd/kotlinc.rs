@@ -13,7 +13,7 @@ pub enum KotlinCompileError {
 }
 
 /// Compiles a `file` with kotlinc and puts it at the `target` path.
-/// For example, given `/build/classes` and `/main/src/HelloWorld.java`,
+/// For example, given `/build/classes` and `/main/src/HelloWorld.kt`,
 /// It will generate a file at `/build/classes/HelloWorld.class`
 /// With the resulting compiled class.
 pub fn compile(target: &Path, file: &Path) -> Result<(), KotlinCompileError> {

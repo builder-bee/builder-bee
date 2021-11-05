@@ -66,7 +66,7 @@ fn main_err() -> Result<()> {
 
 		BeeCLI::Run => subcommands::run::run_project(current_path)?,
 
-		BeeCLI::Find => subcommands::find::find(current_path)?,
+		BeeCLI::Find => subcommands::find::find(current_path),
 
 		BeeCLI::Classes => subcommands::classes::classes(current_path)?,
 	};

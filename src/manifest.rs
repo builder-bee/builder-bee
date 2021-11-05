@@ -1,5 +1,8 @@
 use crate::config::bbee_reader::BBeeConfig;
 
+pub const MANIFEST_FILE_NAME: &str = "META-INF/MANIFEST.MF";
+pub const MANIFEST_FOLDER_NAME: &str = "META-INF";
+
 #[must_use]
 /// Generate a manifest file.
 /// Put at META-INF/MANIFEST.MF

@@ -50,16 +50,13 @@ pub struct Config {
 
 /// Reads the bbee file and outputs a conf gstruct
 pub fn find_and_read(working_directory: &Path) -> Result<Config> {
-	let config = find_config(working_directory);
-
-	if config == Option::None {
-		return Err(anyhow!(ConfigNotFoundError {
+	let config = match find_config(working_directory) {
+		Option::None => return Err(anyhow!(ConfigNotFoundError {
 			project_directory_name: working_directory
 				.display().to_string()
-		}));
+		})),
+		Option::Some(v) => v
 	};
-
-	let config = config.context("Could not get config.")?;
 
 	return Ok(Config {
 		toml_config: read(config.as_path())?,
