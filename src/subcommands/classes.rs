@@ -41,8 +41,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		"successful".green(),
 		amount.to_string().blue(),
 		if amount == 1 { "" } else { "s" },
-		crate::time::readableTimeElapsed(&instant)
-			.white()
+		crate::time::readableTimeElapsed(&now).white()
 	);
 
 	Ok(())

@@ -38,8 +38,7 @@ pub fn run_project(working_directory: &Path) -> Result<()> {
 	println!(
 		"Run {}! (Took {} seconds)",
 		"successful".green(),
-		crate::time::readableTimeElapsed(&now)
-			.white()
+		crate::time::readableTimeElapsed(&now).white()
 	);
 
 	Ok(())
