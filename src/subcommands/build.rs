@@ -34,6 +34,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 
 	Term::stdout().clear_line()?;
 
+	#[allow(clippy::cast_precision_loss)]
 	println!(
 		"Build {}! (Took {} seconds).",
 		"successful".green(),
