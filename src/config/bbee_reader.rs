@@ -90,7 +90,7 @@ pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 			.with_context(|| {
 				format!(
 					"Could not find bbee.toml in {} or any of its parents",
-					current_directory.display().to_string()
+					current_directory.display()
 				)
 			})
 			.ok()?;
