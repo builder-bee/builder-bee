@@ -10,6 +10,7 @@ mod jar;
 mod manifest;
 mod spinner;
 mod subcommands;
+mod time;
 use anyhow::{Context, Result};
 use std::time::Instant;
 
@@ -74,8 +75,7 @@ fn main_err() -> Result<()> {
 	println!(
 		"All tasks {}. (Took {} seconds).",
 		"successful".green(),
-		(instant.elapsed().as_millis() as f64 / 1000.0)
-			.to_string()
+		crate::time::readableTimeElapsed(&instant)
 			.white()
 	);
 

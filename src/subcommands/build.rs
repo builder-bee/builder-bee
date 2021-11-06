@@ -38,8 +38,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 	println!(
 		"Build {}! (Took {} seconds).",
 		"successful".green(),
-		(now.elapsed().as_millis() as f64 / 1000.0)
-			.to_string()
+		crate::time::readableTimeElapsed(&instant)
 			.white()
 	);
 
