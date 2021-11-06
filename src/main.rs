@@ -1,5 +1,6 @@
 #![crate_name = "bbee"]
 #![warn(missing_docs)]
+#![deny(clippy::panic, clippy::unwrap_used, clippy::lossy_float_literal, clippy::str_to_string)]
 
 //! The main entry point for the bbee command-line tool.
 

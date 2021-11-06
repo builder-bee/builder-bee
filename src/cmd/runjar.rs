@@ -23,7 +23,7 @@ pub fn javarun(file: &Path) -> Result<String, JavaRunError> {
 		Ok({
 			let mut chars = command.stdout.chars();
 			chars.next_back();
-			chars.as_str().to_string()
+			chars.as_str().to_owned()
 		})
 	} else {
 		Err(JavaRunError::CommandFailed {

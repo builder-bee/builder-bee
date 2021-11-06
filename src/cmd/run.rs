@@ -16,7 +16,7 @@ pub fn run(command: &mut Command) -> Result<CommandOutput> {
 
 	Ok(CommandOutput {
 		status: output.status,
-		stdout: str::from_utf8(&output.stdout)?.to_string(),
-		stderr: str::from_utf8(&output.stderr)?.to_string(),
+		stdout: str::from_utf8(&output.stdout)?.to_owned(),
+		stderr: str::from_utf8(&output.stderr)?.to_owned(),
 	})
 }

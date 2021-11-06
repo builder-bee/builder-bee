@@ -128,23 +128,23 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 				.ok_or_else(|| anyhow!("Name not found"))?
 				.as_str()
 				.ok_or_else(|| anyhow!("Name is not string!"))?
-				.to_string(),
+				.to_owned(),
 
 			// Get optional main class.
 			main: info
 				.get("main")
-				.unwrap_or(&Value::String("1.0.0".to_string()))
+				.unwrap_or(&Value::String("1.0.0".to_owned()))
 				.as_str()
 				.ok_or_else(|| anyhow!("[info] main is not a string"))?
-				.to_string(),
+				.to_owned(),
 
 			// Get semi-mandatory version number (defaults to 1.0.0)
 			version: info
 				.get("version")
-				.unwrap_or(&Value::String("1.0.0".to_string()))
+				.unwrap_or(&Value::String("1.0.0".to_owned()))
 				.as_str()
 				.unwrap_or("1.0.0")
-				.to_string(),
+				.to_owned(),
 		},
 
 		dependencies: if let Some(value) = dependencies {
@@ -166,15 +166,15 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 							.ok_or_else(|| anyhow!("Version not found"))?
 							.as_str()
 							.ok_or_else(|| anyhow!("Version is not a string"))?
-							.to_string(),
+							.to_owned(),
 
 						// Shade's default is None
 						shade: value
 							.get("shade")
-							.unwrap_or(&Value::String("none".to_string()))
+							.unwrap_or(&Value::String("none".to_owned()))
 							.as_str()
 							.ok_or_else(|| anyhow!("Shade value is not a string"))?
-							.to_string(),
+							.to_owned(),
 					})
 				})
 				.take_while(Result::is_ok)
