@@ -1,5 +1,5 @@
 #!/bin/sh
 
 rustup component add clippy
-cargo clippy --fix
+cargo clippy --fix -- -W clippy::pedantic
 cargo fmt

@@ -16,6 +16,9 @@ pub enum KotlinCompileError {
 /// For example, given `/build/classes` and `/main/src/HelloWorld.kt`,
 /// It will generate a file at `/build/classes/HelloWorld.class`
 /// With the resulting compiled class.
+///
+/// # Errors
+/// This function will return an error if the kotlinc command fails, or if the console couldn't find kotlinc.
 pub fn compile(target: &Path, file: &Path) -> Result<(), KotlinCompileError> {
 	let command_output = run(Command::new("kotlinc")
 		.arg(file.display().to_string())

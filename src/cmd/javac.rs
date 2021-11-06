@@ -16,6 +16,9 @@ pub enum JavaCompileError {
 /// For example, given `/build/classes` and `/main/src/HelloWorld.java`,
 /// It will generate a file at `/build/classes/HelloWorld.class`
 /// With the resulting compiled class.
+///
+/// # Errors
+/// Throws an error if javac could not be run, or if the compilation failed.
 pub fn compile(target: &Path, file: &Path) -> Result<(), JavaCompileError> {
 	let command_output = run(Command::new("javac")
 		.arg(file.display().to_string())
