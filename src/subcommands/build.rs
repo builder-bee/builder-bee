@@ -8,7 +8,6 @@ use std::path::Path;
 use std::time::Instant;
 
 pub fn build(working_directory: &Path) -> Result<()> {
-
 	// Read the config file
 	let config = bbee_reader::find_and_read(working_directory)?;
 
@@ -24,7 +23,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
 	))
-	.spinner(crate::bbee_spinner!())
+	.spinner(bbee_spinner!())
 	.start();
 
 	// Finally, compile the jar
