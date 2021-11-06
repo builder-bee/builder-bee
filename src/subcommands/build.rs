@@ -23,7 +23,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
 	))
-	.spinner(bbee_spinner!())
+	.spinner(crate::bbee_spinner!())
 	.start();
 
 	// Finally, compile the jar
