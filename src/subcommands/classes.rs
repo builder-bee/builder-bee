@@ -13,7 +13,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 
 	// Fancy class spinner
 	let spinner = SpinnerBuilder::new(format!(
-		"Compiling {} -- v{}...",
+		"Compiling {} v{}...",
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
 	))
@@ -24,7 +24,10 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 	let now = Instant::now();
 
 	// Run the compilation
-	let amount = match compile(&config) {
+	let amount = match compile(
+		config.directory.join("main").join("src"),
+		config.directory.join("build").join("classes")
+	) {
 		Ok(value) => value,
 		Err(err) => {
 			spinner.close();

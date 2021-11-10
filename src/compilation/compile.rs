@@ -1,10 +1,10 @@
 use crate::cmd::javac;
 use crate::cmd::kotlinc;
 use anyhow::Result;
-use bbee_config::reader::Config;
 use std::ffi::OsStr;
 use std::fs;
 use thiserror::Error;
+use std::path::PathBuf;
 use walkdir::WalkDir;
 
 #[derive(Debug, Error)]
@@ -28,12 +28,13 @@ pub enum CompileError {
 
 /// Compiles a project based on the BBeeConfig, returning the amount of files compiled.
 ///
-/// * `config` The config to base this project on
-pub fn compile(config: &Config) -> Result<i64, CompileError> {
+/// * `source` the source of all the files
+/// * `target` the target to place the files
+pub fn compile(source: PathBuf, target: PathBuf) -> Result<i64, CompileError> {
 	let mut amount: i64 = 0;
 
 	// Walk through all the current .java files
-	for entry in WalkDir::new(config.directory.join("main").join("src")) {
+	for entry in WalkDir::new(source) {
 		// Get a reference of the entry
 		let ref_entry = &entry?;
 
@@ -42,9 +43,7 @@ pub fn compile(config: &Config) -> Result<i64, CompileError> {
 			continue;
 		}
 
-		let build_directory = &config.directory.join("build").join("classes");
-
-		fs::create_dir_all(&build_directory)?;
+		fs::create_dir_all(&target)?;
 
 		match ref_entry
 			.path()
@@ -54,7 +53,7 @@ pub fn compile(config: &Config) -> Result<i64, CompileError> {
 				file_name: ref_entry.path().display().to_string(),
 			})? {
 			// Compile it with kotlinc.
-			"kt" => match kotlinc::compile(build_directory, ref_entry.path()) {
+			"kt" => match kotlinc::compile(&target, ref_entry.path()) {
 				Ok(_) => (),
 				Err(error) => {
 					return Err(CompileError::BadCommandCall {
@@ -64,7 +63,7 @@ pub fn compile(config: &Config) -> Result<i64, CompileError> {
 				}
 			},
 			// Compile it with javac.
-			"java" => match javac::compile(build_directory, ref_entry.path()) {
+			"java" => match javac::compile(&target, ref_entry.path()) {
 				Ok(_) => (),
 				Err(error) => {
 					return Err(CompileError::BadCommandCall {

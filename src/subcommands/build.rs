@@ -19,7 +19,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 
 	// Fancy building spinner
 	let spinner = SpinnerBuilder::new(format!(
-		"Building {} -- v{}...",
+		"Building {} v{}...",
 		config.toml_config.info.name.white(),
 		config.toml_config.info.version.white()
 	))
