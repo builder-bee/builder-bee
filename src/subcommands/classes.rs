@@ -31,7 +31,7 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 		Ok(value) => value,
 		Err(err) => {
 			spinner.close();
-			println!();
+			println!(); // prints a new line
 			return Err(anyhow!(err));
 		}
 	};
@@ -41,10 +41,10 @@ pub fn classes(working_directory: &Path) -> Result<()> {
 	Term::stdout().clear_line()?;
 
 	println!(
-		"Compilation {}! {} file{} compiled. (Took {} seconds).",
+		"Compilation {}! {} file{} compiled. ({}s).",
 		"successful".green(),
 		amount.to_string().blue(),
-		if amount == 1 { "" } else { "s" },
+		if amount == 1 { "" } else { "s" }, // 1 file, 2 files
 		crate::time::readable_time_elapsed(&now).white()
 	);
 

@@ -83,7 +83,7 @@ fn main_err() -> Result<()> {
 	};
 
 	println!(
-		"All tasks {}. (Took {} seconds).",
+		"All tasks {}. ({}s).",
 		"successful".green(),
 		crate::time::readable_time_elapsed(&instant).white()
 	);

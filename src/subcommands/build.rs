@@ -35,7 +35,7 @@ pub fn build(working_directory: &Path) -> Result<()> {
 	Term::stdout().clear_line()?;
 
 	println!(
-		"Build {}! (Took {} seconds).",
+		"Build {}! ({}s).",
 		"successful".green(),
 		crate::time::readable_time_elapsed(&now).white()
 	);
