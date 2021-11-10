@@ -11,9 +11,7 @@ pub struct CommandOutput {
 
 /// Runs a command, spawning the command and waiting for output.
 pub fn run(command: &mut Command) -> Result<CommandOutput> {
-	let child = command.spawn()?;
-
-	let output = child.wait_with_output()?;
+	let output = command.spawn()?.wait_with_output()?;
 
 	Ok(CommandOutput {
 		status: output.status,

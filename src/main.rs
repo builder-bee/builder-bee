@@ -40,6 +40,7 @@ enum BeeCLI {
 	Classes,
 }
 
+/// Entry point for builder bee
 fn main() {
 	better_panic::install();
 
@@ -51,6 +52,7 @@ fn main() {
 	};
 }
 
+/// Main function that could possibly return an error.
 fn main_err() -> Result<()> {
 	let current_path_buf =
 		env::current_dir().context("Can not access current working directory!")?;
