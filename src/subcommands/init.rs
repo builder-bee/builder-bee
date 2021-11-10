@@ -1,5 +1,5 @@
-use bbee_config::reader;
 use anyhow::{anyhow, Result};
+use bbee_config::reader;
 use spinner::menu::{Menu, MenuOption, MenuOptional, MenuType};
 use std::option::Option;
 use std::path::Path;

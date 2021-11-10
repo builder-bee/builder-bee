@@ -1,8 +1,8 @@
 use crate::cmd::runjar;
-use bbee_config::reader;
 use crate::jar;
 use crate::subcommands::build;
 use anyhow::{anyhow, Result};
+use bbee_config::reader;
 use colored::Colorize;
 use console::Term;
 use std::path::Path;

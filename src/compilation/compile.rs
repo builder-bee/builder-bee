@@ -1,7 +1,7 @@
 use crate::cmd::javac;
 use crate::cmd::kotlinc;
-use bbee_config::reader::Config;
 use anyhow::Result;
+use bbee_config::reader::Config;
 use std::ffi::OsStr;
 use std::fs;
 use thiserror::Error;
@@ -27,7 +27,7 @@ pub enum CompileError {
 }
 
 /// Compiles a project based on the BBeeConfig, returning the amount of files compiled.
-/// 
+///
 /// * `config` The config to base this project on
 pub fn compile(config: &Config) -> Result<i64, CompileError> {
 	let mut amount: i64 = 0;

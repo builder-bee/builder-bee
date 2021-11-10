@@ -1,6 +1,6 @@
 use crate::compilation::compile::compile;
-use bbee_config::reader;
 use anyhow::{anyhow, Result};
+use bbee_config::reader;
 use colored::Colorize;
 use console::Term;
 use spinner::SpinnerBuilder;

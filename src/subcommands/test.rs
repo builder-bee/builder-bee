@@ -1,6 +1,6 @@
-use bbee_config::reader;
 use anyhow::anyhow;
 use anyhow::Result;
+use bbee_config::reader;
 use std::option::Option;
 use std::path::Path;
 

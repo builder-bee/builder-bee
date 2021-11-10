@@ -1,5 +1,5 @@
-use bbee_config::reader;
 use anyhow::Result;
+use bbee_config::reader;
 use std::fs;
 use std::path::Path;
 use thiserror::Error;
