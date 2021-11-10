@@ -1,4 +1,4 @@
-use crate::config::error::ConfigNotFoundError;
+use crate::error::ConfigNotFoundError;
 use anyhow::{anyhow, Context, Result};
 use std::fmt;
 use std::fmt::{Display, Formatter};

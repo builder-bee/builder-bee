@@ -1,5 +1,5 @@
 use crate::cmd::runjar;
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use crate::jar;
 use crate::subcommands::build;
 use anyhow::{anyhow, Result};

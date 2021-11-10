@@ -1,4 +1,4 @@
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use anyhow::{anyhow, Result};
 use spinner::menu::{Menu, MenuOption, MenuOptional, MenuType};
 use std::option::Option;

@@ -1,5 +1,5 @@
 use crate::compilation::compile::compile;
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use anyhow::{anyhow, Result};
 use colored::Colorize;
 use console::Term;

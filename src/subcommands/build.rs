@@ -1,4 +1,4 @@
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use crate::jar::compile;
 use anyhow::Result;
 use colored::Colorize;

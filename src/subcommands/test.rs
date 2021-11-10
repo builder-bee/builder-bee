@@ -1,4 +1,4 @@
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use anyhow::anyhow;
 use anyhow::Result;
 use std::option::Option;

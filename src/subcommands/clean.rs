@@ -1,4 +1,4 @@
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use anyhow::Result;
 use std::fs;
 use std::path::Path;

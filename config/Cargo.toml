@@ -1,0 +1,11 @@
+[package]
+name = "bbee_config"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+anyhow = "1.0.44"
+serde = { version = "1.0.126", features = ["derive"] }
+thiserror = "1.0.29"
+colored = "2"
+toml = "0.5.8"

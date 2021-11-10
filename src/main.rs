@@ -4,14 +4,16 @@
 
 //! The main entry point for the bbee command-line tool.
 
+extern crate bbee_config;
+
 mod cmd;
 mod compilation;
-mod config;
 mod jar;
 mod manifest;
 mod spinner;
 mod subcommands;
 mod time;
+
 use anyhow::{Context, Result};
 use std::time::Instant;
 

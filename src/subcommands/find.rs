@@ -1,4 +1,4 @@
-use crate::config::bbee_reader;
+use bbee_config::bbee_reader;
 use colored::Colorize;
 use std::path::Path;
 
