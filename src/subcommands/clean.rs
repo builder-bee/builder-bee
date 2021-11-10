@@ -1,4 +1,4 @@
-use bbee_config::bbee_reader;
+use bbee_config::reader;
 use anyhow::Result;
 use std::fs;
 use std::path::Path;
@@ -19,7 +19,7 @@ pub enum CleanError {
 
 /// Remove the build directory from the `working_directory`
 pub fn clean(working_directory: &Path) -> Result<(), CleanError> {
-	let directory = bbee_reader::find_config(working_directory)
+	let directory = reader::find_config(working_directory)
 		.ok_or_else(|| CleanError::NoConfigFound(working_directory.display().to_string()))?;
 
 	fs::remove_dir_all(

@@ -1,4 +1,4 @@
-use bbee_config::bbee_reader;
+use bbee_config::reader;
 use crate::jar::compile;
 use anyhow::Result;
 use colored::Colorize;
@@ -9,7 +9,7 @@ use std::time::Instant;
 
 pub fn build(working_directory: &Path) -> Result<()> {
 	// Read the config file
-	let config = bbee_reader::find_and_read(working_directory)?;
+	let config = reader::find_and_read(working_directory)?;
 
 	// Run the compilation
 	crate::subcommands::classes::classes(working_directory)?;

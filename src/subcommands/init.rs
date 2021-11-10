@@ -1,11 +1,11 @@
-use bbee_config::bbee_reader;
+use bbee_config::reader;
 use anyhow::{anyhow, Result};
 use spinner::menu::{Menu, MenuOption, MenuOptional, MenuType};
 use std::option::Option;
 use std::path::Path;
 
 pub fn init(working_directory: &Path) -> Result<()> {
-	if bbee_reader::find_config(working_directory) != Option::None {
+	if reader::find_config(working_directory) != Option::None {
 		return Err(anyhow!("This project has already been initialized!"));
 	}
 

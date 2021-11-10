@@ -1,4 +1,4 @@
-use bbee_config::bbee_reader::BBeeConfig;
+use bbee_config::reader::BBeeConfig;
 
 /// Generates a jar name from a `BBeeConfig`
 #[must_use]

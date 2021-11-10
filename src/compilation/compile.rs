@@ -1,6 +1,6 @@
 use crate::cmd::javac;
 use crate::cmd::kotlinc;
-use bbee_config::bbee_reader::Config;
+use bbee_config::reader::Config;
 use anyhow::Result;
 use std::ffi::OsStr;
 use std::fs;

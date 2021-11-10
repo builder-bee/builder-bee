@@ -1,5 +1,5 @@
 use crate::compilation::compile::compile;
-use bbee_config::bbee_reader;
+use bbee_config::reader;
 use anyhow::{anyhow, Result};
 use colored::Colorize;
 use console::Term;
@@ -9,7 +9,7 @@ use std::time::Instant;
 
 pub fn classes(working_directory: &Path) -> Result<()> {
 	// Read the config file
-	let config = bbee_reader::find_and_read(working_directory)?;
+	let config = reader::find_and_read(working_directory)?;
 
 	// Fancy class spinner
 	let spinner = SpinnerBuilder::new(format!(
