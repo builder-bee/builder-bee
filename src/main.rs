@@ -25,6 +25,7 @@ use std::time::Instant;
 use colored::Colorize;
 use std::env;
 use structopt::StructOpt;
+use bbee_config::reader::find_and_read;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
@@ -47,8 +48,6 @@ enum BeeCLI {
 
 /// Entry point for builder bee
 fn main() {
-	better_panic::install();
-
 	match main_err() {
 		Ok(_) => (),
 		Err(error) => {
@@ -67,19 +66,13 @@ fn main_err() -> Result<()> {
 	let instant = Instant::now();
 
 	match BeeCLI::from_args() {
-		BeeCLI::Build => subcommands::build::build(current_path)?,
-
-		BeeCLI::Init => subcommands::init::init(current_path)?,
-
-		BeeCLI::Clean => subcommands::clean::clean(current_path)?,
-
-		BeeCLI::Test => subcommands::test::test(current_path)?,
-
-		BeeCLI::Run => subcommands::run::run_project(current_path)?,
-
 		BeeCLI::Find => subcommands::find::find(current_path),
-
-		BeeCLI::Classes => subcommands::classes::classes(current_path)?,
+		BeeCLI::Init => subcommands::init::init(current_path)?,
+		BeeCLI::Build => subcommands::build::build(&find_and_read(&current_path)?)?,
+		BeeCLI::Clean => subcommands::clean::clean(&find_and_read(&current_path)?)?,
+		BeeCLI::Test => subcommands::test::test(&find_and_read(&current_path)?)?,
+		BeeCLI::Run => subcommands::run::run_project(&find_and_read(&current_path)?)?,
+		BeeCLI::Classes => subcommands::classes::classes(&find_and_read(&current_path)?)?,
 	};
 
 	println!(

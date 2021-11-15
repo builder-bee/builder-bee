@@ -1,16 +1,12 @@
 use crate::compilation::compile::compile;
 use anyhow::{anyhow, Result};
-use bbee_config::reader;
+use bbee_config::reader::Config;
 use colored::Colorize;
 use console::Term;
 use spinner::SpinnerBuilder;
-use std::path::Path;
 use std::time::Instant;
 
-pub fn classes(working_directory: &Path) -> Result<()> {
-	// Read the config file
-	let config = reader::find_and_read(working_directory)?;
-
+pub fn classes(config: &Config) -> Result<()> {
 	// Fancy class spinner
 	let spinner = SpinnerBuilder::new(format!(
 		"Compiling {} v{}...",

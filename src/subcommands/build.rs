@@ -1,18 +1,14 @@
 use crate::jar::compile;
 use anyhow::Result;
-use bbee_config::reader;
+use bbee_config::reader::Config;
 use colored::Colorize;
 use console::Term;
 use spinner::SpinnerBuilder;
-use std::path::Path;
 use std::time::Instant;
 
-pub fn build(working_directory: &Path) -> Result<()> {
-	// Read the config file
-	let config = reader::find_and_read(working_directory)?;
-
+pub fn build(config: &Config) -> Result<()> {
 	// Run the compilation
-	crate::subcommands::classes::classes(working_directory)?;
+	crate::subcommands::classes::classes(config)?;
 
 	// Benchmark how long it takes to build the jar
 	let now = Instant::now();

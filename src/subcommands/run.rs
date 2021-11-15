@@ -2,18 +2,14 @@ use crate::cmd::runjar;
 use crate::jar;
 use crate::subcommands::build;
 use anyhow::{anyhow, Result};
-use bbee_config::reader;
+use bbee_config::reader::Config;
 use colored::Colorize;
 use console::Term;
-use std::path::Path;
 use std::time::Instant;
 
 /// Runs the generated jar.
-pub fn run_project(working_directory: &Path) -> Result<()> {
-	// Read the config file
-	let config = reader::find_and_read(working_directory)?;
-
-	build::build(&config.directory)?;
+pub fn run_project(config: &Config) -> Result<()> {
+	build::build(&config)?;
 
 	let now = Instant::now();
 
