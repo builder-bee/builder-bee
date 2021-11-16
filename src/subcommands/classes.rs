@@ -1,4 +1,6 @@
 use crate::compilation::compile::compile;
+use crate::bbee_spinner;
+use crate::spinner::spinner_message;
 use anyhow::{anyhow, Result};
 use bbee_config::reader::Config;
 use colored::Colorize;
@@ -8,12 +10,8 @@ use std::time::Instant;
 
 pub fn classes(config: &Config) -> Result<()> {
 	// Fancy class spinner
-	let spinner = SpinnerBuilder::new(format!(
-		"Compiling {} v{}...",
-		config.toml_config.info.name.white(),
-		config.toml_config.info.version.white()
-	))
-	.spinner(crate::bbee_spinner!())
+	let spinner = SpinnerBuilder::new(spinner_message("Compiling", config))
+	.spinner(bbee_spinner!())
 	.start();
 
 	// Benchmark how long it takes to compile the jar

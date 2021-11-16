@@ -1,4 +1,6 @@
 use crate::jar::compile;
+use crate::bbee_spinner;
+use crate::spinner::spinner_message;
 use anyhow::Result;
 use bbee_config::reader::Config;
 use colored::Colorize;
@@ -14,12 +16,8 @@ pub fn build(config: &Config) -> Result<()> {
 	let now = Instant::now();
 
 	// Fancy building spinner
-	let spinner = SpinnerBuilder::new(format!(
-		"Building {} v{}...",
-		config.toml_config.info.name.white(),
-		config.toml_config.info.version.white()
-	))
-	.spinner(crate::bbee_spinner!())
+	let spinner = SpinnerBuilder::new(spinner_message("Building", config))
+	.spinner(bbee_spinner!())
 	.start();
 
 	// Finally, compile the jar
