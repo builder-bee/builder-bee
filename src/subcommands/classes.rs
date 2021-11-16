@@ -21,7 +21,7 @@ pub fn classes(config: &Config) -> Result<()> {
 
 	// Run the compilation
 	let amount = match compile(
-		config.directory.join("main").join("src"),
+		config.directory.join("src"),
 		config.directory.join("build").join("classes")
 	) {
 		Ok(value) => value,

@@ -4,14 +4,13 @@ mod compile_test {
 
 	use anyhow::Result;
 	use bbee::subcommands::build;
-	use relative_path::RelativePath;
+	use bbee_config::reader::find_and_read;
+	use std::path::Path;
 
 	#[test]
 	fn assure_compile_success() -> Result<()> {
 		build::build(
-			RelativePath::new("./examples/hello_world")
-				.to_logical_path("./")
-				.as_path(),
+			&find_and_read(Path::new("examples/hello-world"))?
 		)?;
 
 		Ok(())
