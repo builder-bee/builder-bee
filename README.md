@@ -6,8 +6,6 @@ A tool to make JVM related applications.
 
 bbee run -- runs the current project -- depends on build
 
-bbee run (file) -- runs a file
-
 bbee build -- Runs classes as well as moving all the classes to a jar
 
 bbee classes -- Compiles the files in a project to .class files

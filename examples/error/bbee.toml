@@ -1,3 +1,4 @@
 [info]
 name = "Error"
 main = "Error"
+group = "example.error"
