@@ -2,3 +2,6 @@
 name = "LocalProjectDependency"
 main = "Main"
 group = "example.localprojectdependency"
+
+[dependencies]
+"./cool-print" = true
