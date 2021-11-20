@@ -22,10 +22,10 @@ mod time;
 use anyhow::{Context, Result};
 use std::time::Instant;
 
+use bbee_config::reader::find_and_read;
 use colored::Colorize;
 use std::env;
 use structopt::StructOpt;
-use bbee_config::reader::find_and_read;
 
 #[derive(StructOpt)]
 #[structopt(about = "a buzzy build tool for the JVM.")]
