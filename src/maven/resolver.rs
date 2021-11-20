@@ -1,5 +1,3 @@
-use std::ops::Index;
-
 use reqwest::StatusCode;
 
 pub struct Dependency {
