@@ -18,7 +18,6 @@ mod manifest;
 mod spinner;
 mod subcommands;
 mod time;
-mod maven;
 
 use anyhow::{Context, Result};
 use std::time::Instant;

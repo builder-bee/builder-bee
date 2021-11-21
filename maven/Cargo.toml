@@ -2,3 +2,10 @@
 name = "bbee_maven"
 version = "0.1.0"
 edition = "2021"
+
+[dependencies]
+tokio = { version = "1.14.0", features = ["full"] }
+async-std = { version = "1.10.0", features = ["attributes"] }
+
+[dev-dependencies]
+pretty_assertions = "1.0.0"
