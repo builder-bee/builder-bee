@@ -14,7 +14,7 @@ mod dependency_test {
 			version: String::from("master-SNAPSHOT")
 		};
 		
-		let respositories = correct_repositories(vec!["https://jitpack.io/"]);
+		let respositories = correct_repositories(&vec!["https://jitpack.io/".to_owned()]);
 		let result = find_dependency(&dependency, &respositories).await.ok_or_else(|| anyhow::anyhow!("No result"))?;
 
 		assert_eq!(result, "https://jitpack.io/com/github/Minestom/Minestom/master-SNAPSHOT/Minestom-master-SNAPSHOT.jar");
