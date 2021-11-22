@@ -1,5 +1,5 @@
 #!/bin/sh
 
 rustup component add clippy
-cargo clippy --fix
-cargo fmt
+rustup run nightly cargo clippy --fix
+rustup run nightly cargo fmt

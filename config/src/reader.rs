@@ -13,10 +13,8 @@ const FILE_NAME: &str = "bbee.toml";
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum Shade {
 	None,
-	Some {
-		package: String
-	},
-	All
+	Some { package: String },
+	All,
 }
 
 /// Represents a dependency inside BBEE
@@ -24,7 +22,7 @@ pub enum Shade {
 pub struct BBeeConfigDependency {
 	pub name: String,
 	pub version: String,
-	pub shade: Shade
+	pub shade: Shade,
 }
 
 impl Display for BBeeConfigDependency {
@@ -183,11 +181,12 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 							.get("shade")
 							.unwrap_or(&Value::String("all".to_owned()))
 							.as_str()
-							.ok_or_else(|| anyhow!("Shade value is not a string"))? {
-								"all" => Shade::All,
-								"none" => Shade::None,
-								_ => Err(anyhow!("Shade must be either all or none!"))?
-							}
+							.ok_or_else(|| anyhow!("Shade value is not a string"))?
+						{
+							"all" => Shade::All,
+							"none" => Shade::None,
+							_ => Err(anyhow!("Shade must be either all or none!"))?,
+						},
 					})
 				})
 				.take_while(Result::is_ok)
