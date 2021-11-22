@@ -2,3 +2,9 @@
 name = "HelloWorld"
 main = "HelloWorldKt"
 group = "example.helloworldkt"
+kotlin = "1.6.0"
+dependencies = [
+	# If your kotlin version is set, you can shade many kotlin-specific dependencies
+	"kotlin-stdlib",
+	"kotlin-reflect"
+]
