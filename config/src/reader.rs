@@ -10,19 +10,28 @@ use toml::Value;
 /// Config name for bbee -- bbee.toml
 const FILE_NAME: &str = "bbee.toml";
 
+#[derive(PartialEq, Eq, Clone, Debug)]
+pub enum Shade {
+	None,
+	Some {
+		package: String
+	},
+	All
+}
+
 /// Represents a dependency inside BBEE
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct BBeeConfigDependency {
 	pub name: String,
 	pub version: String,
-	pub shade: String, // TODO enum?
+	pub shade: Shade
 }
 
 impl Display for BBeeConfigDependency {
 	fn fmt(&self, f: &mut Formatter) -> fmt::Result {
 		write!(
 			f,
-			"{}: v{} (shade: {})",
+			"{}: v{} (shade: {:?})",
 			self.name, self.version, self.shade
 		) // user-facing output
 	}
@@ -170,12 +179,15 @@ fn config_from_value(value: &Value) -> Result<BBeeConfig> {
 							.to_owned(),
 
 						// Shade's default is None
-						shade: value
+						shade: match value
 							.get("shade")
-							.unwrap_or(&Value::String("none".to_owned()))
+							.unwrap_or(&Value::String("all".to_owned()))
 							.as_str()
-							.ok_or_else(|| anyhow!("Shade value is not a string"))?
-							.to_owned(),
+							.ok_or_else(|| anyhow!("Shade value is not a string"))? {
+								"all" => Shade::All,
+								"none" => Shade::None,
+								_ => Err(anyhow!("Shade must be either all or none!"))?
+							}
 					})
 				})
 				.take_while(Result::is_ok)
