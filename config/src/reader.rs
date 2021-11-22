@@ -51,6 +51,7 @@ pub struct BBeeConfig {
 	pub dependencies: Vec<BBeeConfigDependency>,
 }
 
+/// Represents a Config -- what directory the config is in and the actual configuration
 pub struct Config {
 	pub toml_config: BBeeConfig,
 	pub directory: PathBuf,
@@ -76,6 +77,7 @@ pub fn find_and_read(working_directory: &Path) -> Result<Config> {
 	});
 }
 
+/// Reads a config from a path -- usually bbee.toml
 pub fn read(config: &Path) -> Result<BBeeConfig> {
 	// Read it using serde's serialization and TOML
 	let config_toml = &fs::read_to_string(config)?.parse::<Value>()?;
@@ -84,6 +86,7 @@ pub fn read(config: &Path) -> Result<BBeeConfig> {
 	config_from_value(config_toml)
 }
 
+/// Finds the lcoation of a configuration
 #[must_use]
 pub fn find_config(current_directory: &Path) -> Option<PathBuf> {
 	let buf = current_directory.to_path_buf();
