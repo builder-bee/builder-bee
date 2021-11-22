@@ -1,10 +1,9 @@
 use crate::compilation::compile::compile;
 use crate::bbee_spinner;
-use crate::spinner::spinner_message;
+use crate::spinner::{DELETE_LINE_CODE, spinner_message};
 use anyhow::{anyhow, Result};
 use bbee_config::reader::Config;
 use colored::Colorize;
-use console::Term;
 use spinner::SpinnerBuilder;
 use std::time::Instant;
 
@@ -32,7 +31,7 @@ pub fn classes(config: &Config) -> Result<()> {
 
 	spinner.close();
 
-	Term::stdout().clear_line()?;
+	print!("{}", DELETE_LINE_CODE);
 
 	println!(
 		"Compilation {}! {} file{} compiled. ({}s).",

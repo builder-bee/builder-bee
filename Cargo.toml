@@ -4,8 +4,6 @@ version = "0.1.1"
 authors = ["LeoDog896 <LeoDog896@hotmail.com>"]
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 structopt = "0.3.13"
 walkdir = "2"
@@ -16,7 +14,6 @@ thiserror = "1.0.29"
 better-panic = "0.2.0"
 relative-path = "1.5.0"
 anyhow = "1.0.44"
-console = "0.15.0"
 bbee_config = { path = "./config"}
 bbee_maven = { path = "./maven" }
 reqwest = "0.11.6"
@@ -28,5 +25,6 @@ codegen-units = 1
 [workspace]
 
 members = [
-    "config"
+    "config",
+	"maven"
 ]

@@ -5,6 +5,9 @@ use colored::Colorize;
 
 pub static SPINNER_FORMAT: &[&str] = &["-", "\\", "|", "/"];
 
+/// The code to delete the current line
+pub const DELETE_LINE_CODE: &str = "\r";
+
 /// Return bbee's spinner format.
 ///
 /// This macro turns the static array of spinner strings into a simple `bbee_spinner!()` command.

@@ -1,10 +1,10 @@
 use crate::cmd::runjar;
 use crate::jar;
 use crate::subcommands::build;
+use crate::spinner::DELETE_LINE_CODE;
 use anyhow::{anyhow, Result};
 use bbee_config::reader::Config;
 use colored::Colorize;
-use console::Term;
 use std::time::Instant;
 
 /// Runs the generated jar.
@@ -29,7 +29,7 @@ pub fn run_project(config: &Config) -> Result<()> {
 		}
 	};
 
-	Term::stdout().clear_line()?;
+	print!("{}", DELETE_LINE_CODE);
 
 	println!(
 		"Run {}! ({}s)",

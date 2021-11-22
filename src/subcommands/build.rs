@@ -1,10 +1,9 @@
 use crate::jar::compile;
 use crate::bbee_spinner;
-use crate::spinner::spinner_message;
+use crate::spinner::{DELETE_LINE_CODE, spinner_message};
 use anyhow::Result;
 use bbee_config::reader::Config;
 use colored::Colorize;
-use console::Term;
 use spinner::SpinnerBuilder;
 use std::time::Instant;
 
@@ -26,7 +25,7 @@ pub fn build(config: &Config) -> Result<()> {
 	// Stop fancy spinner
 	spinner.close();
 
-	Term::stdout().clear_line()?;
+	print!("{}", DELETE_LINE_CODE);
 
 	println!(
 		"Build {}! ({}s).",
