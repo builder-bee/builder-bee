@@ -10,6 +10,7 @@ use toml::Value;
 /// Config name for bbee -- bbee.toml
 const FILE_NAME: &str = "bbee.toml";
 
+/// The shade mode the dependency is currently in. Default is all.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub enum Shade {
 	None,
@@ -17,7 +18,7 @@ pub enum Shade {
 	All,
 }
 
-/// Represents a dependency inside BBEE
+/// Represents a dependency inside BBEE.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct BBeeConfigDependency {
 	pub name: String,
