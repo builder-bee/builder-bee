@@ -3,7 +3,5 @@ name = "LocalProjectDependency"
 main = "Main"
 group = "example.localprojectdependency"
 
-dependencies = [
-	# BBee supports local dependencies
-	"./cool-print"
-]
+[dependencies]
+cool-print = "./cool-print"
