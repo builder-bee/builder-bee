@@ -1,5 +1,5 @@
 use anyhow::Result;
-use bbee_config::reader::Config;
+use bbee_config::typing::Config;
 use std::fs;
 use thiserror::Error;
 

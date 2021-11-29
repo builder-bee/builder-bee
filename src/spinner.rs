@@ -1,6 +1,6 @@
 //! Spinner utils for builder bee
 
-use bbee_config::reader::Config;
+use bbee_config::typing::Config;
 use colored::Colorize;
 
 pub static SPINNER_FORMAT: &[&str] = &["-", "\\", "|", "/"];

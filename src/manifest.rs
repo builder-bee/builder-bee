@@ -1,6 +1,6 @@
 //! Manifest utils for generating a MANIFEST.MF config
 
-use bbee_config::reader::BBeeConfig;
+use bbee_config::typing::BBeeConfig;
 
 pub const MANIFEST_FILE_NAME: &str = "META-INF/MANIFEST.MF";
 pub const MANIFEST_FOLDER_NAME: &str = "META-INF";

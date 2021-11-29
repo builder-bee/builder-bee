@@ -3,7 +3,7 @@ use crate::jar;
 use crate::subcommands::build;
 use crate::spinner::DELETE_LINE_CODE;
 use anyhow::{anyhow, Result};
-use bbee_config::reader::Config;
+use bbee_config::typing::Config;
 use colored::Colorize;
 use std::time::Instant;
 

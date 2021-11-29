@@ -2,7 +2,7 @@ use crate::jar::compile;
 use crate::bbee_spinner;
 use crate::spinner::{DELETE_LINE_CODE, spinner_message};
 use anyhow::Result;
-use bbee_config::reader::Config;
+use bbee_config::typing::Config;
 use colored::Colorize;
 use spinner::SpinnerBuilder;
 use std::time::Instant;
