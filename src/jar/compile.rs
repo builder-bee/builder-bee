@@ -1,7 +1,7 @@
 use crate::jar;
 use crate::manifest::{generate, MANIFEST_FILE_NAME, MANIFEST_FOLDER_NAME};
 use anyhow::{Context, Result};
-use bbee_config::reader::BBeeConfig;
+use bbee_config::typing::BBeeConfig;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
